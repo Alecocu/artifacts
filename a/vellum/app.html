@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>/* Stand-in for Claude's artifact runtime, so pages built for claude.ai work on a plain website.
+   - 'downloads' saves files with a normal browser download.
+   - Every other capability (shared database, user, AI sampling...) answers null, which each page
+     already treats as "not available here" and falls back to its local mode. */
+(function () {
+  if (window.claude && typeof window.claude.use === 'function') return;
+  function toBlob(data, filename) {
+    if (data instanceof Blob) return data;
+    if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) return new Blob([data]);
+    var type = /\.json$/i.test(filename) ? 'application/json' : 'text/plain';
+    return new Blob([typeof data === 'string' ? data : JSON.stringify(data, null, 2)], { type: type });
+  }
+  var downloads = {
+    save: function (opts) {
+      opts = opts || {};
+      var name = opts.filename || 'download';
+      var url = URL.createObjectURL(toBlob(opts.data, name));
+      var a = document.createElement('a');
+      a.href = url; a.download = name; a.rel = 'noopener'; a.style.display = 'none';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
+      return Promise.resolve({ ok: true });
+    }
+  };
+  window.claude = {
+    standalone: true,
+    use: function (name) { return Promise.resolve(name === 'downloads' ? downloads : null); }
+  };
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M4 16.5l8 4 8-4M4 12l8 4 8-4M12 3.5l8 4-8 4-8-4z%22 fill=%22none%22 stroke=%22%232747ff%22 stroke-width=%222%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,300..700;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300..700&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400&family=JetBrains+Mono:wght@300..700&family=Archivo+Narrow:ital,wght@0,400..700;1,400&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="./assets/index-C82MDR20.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-D3ZxjiSJ.css">
+</head>
+<body>
+<div id="app"></div>
+</body>
+</html>

@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>/* Stand-in for Claude's artifact runtime, so pages built for claude.ai work on a plain website.
+   - 'downloads' saves files with a normal browser download.
+   - Every other capability (shared database, user, AI sampling...) answers null, which each page
+     already treats as "not available here" and falls back to its local mode. */
+(function () {
+  if (window.claude && typeof window.claude.use === 'function') return;
+  function toBlob(data, filename) {
+    if (data instanceof Blob) return data;
+    if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) return new Blob([data]);
+    var type = /\.json$/i.test(filename) ? 'application/json' : 'text/plain';
+    return new Blob([typeof data === 'string' ? data : JSON.stringify(data, null, 2)], { type: type });
+  }
+  var downloads = {
+    save: function (opts) {
+      opts = opts || {};
+      var name = opts.filename || 'download';
+      var url = URL.createObjectURL(toBlob(opts.data, name));
+      var a = document.createElement('a');
+      a.href = url; a.download = name; a.rel = 'noopener'; a.style.display = 'none';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
+      return Promise.resolve({ ok: true });
+    }
+  };
+  window.claude = {
+    standalone: true,
+    use: function (name) { return Promise.resolve(name === 'downloads' ? downloads : null); }
+  };
+})();
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Sirocco Hood Blower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout: instrument-panel workbench. 3D model + live charts on the left, parameter rack on the right. */
+  --bg: #eef1f4;
+  --panel: #ffffff;
+  --ink: #17202b;
+  --muted: #5c6977;
+  --line: #d3d9e0;
+  --accent: #1f5fbf;      /* cobalt: operating curve, primary controls */
+  --wheel: #d9732b;       /* sirocco orange: impellers, system curve */
+  --ec: #2f8f6b;          /* EC motor */
+  --good: #2f8f6b; --warn: #b7791f; --bad: #c0392b;
+  --grid: #e3e8ee;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161c; --panel: #192029; --ink: #e6ebf1; --muted: #93a0ae; --line: #2b3542;
+    --accent: #6ea2ff; --wheel: #f0954f; --ec: #4fc495; --good: #4fc495; --warn: #e0a84a; --bad: #ef6b5b; --grid: #232c37;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161c; --panel: #192029; --ink: #e6ebf1; --muted: #93a0ae; --line: #2b3542;
+  --accent: #6ea2ff; --wheel: #f0954f; --ec: #4fc495; --good: #4fc495; --warn: #e0a84a; --bad: #ef6b5b; --grid: #232c37;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.45; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: .01em; }
+h1 { font-size: 24px; font-weight: 700; }
+h2 { font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1480px; margin: 0 auto; padding: 18px 20px 40px; display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+header p { margin: 0; color: var(--muted); max-width: 80ch; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.tile .k { font-size: 12px; color: var(--muted); }
+.tile .v { font-family: var(--font-mono); font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tile .v small { font-size: 12px; font-weight: 400; color: var(--muted); }
+.tile .s { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+.tile.hl { border-left: 4px solid var(--accent); }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .main { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 10px; }
+.viewer { position: relative; height: 470px; border-radius: 6px; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, var(--panel), var(--bg)); border: 1px solid var(--line); }
+.viewer canvas { display: block; width: 100%; height: 100%; }
+.vbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.charts { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+@media (max-width: 800px) { .charts { grid-template-columns: 1fr; } }
+.chart { width: 100%; height: 300px; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 16px; height: 3px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+.legend i.d { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 7px) !important; height: 2px; }
+button, .btn { font: 500 13px var(--font-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 11px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:disabled { opacity: .6; cursor: progress; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.primary:hover { filter: brightness(1.08); }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.rack { display: grid; gap: 10px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+details { border-top: 1px solid var(--line); padding-top: 8px; }
+details:first-of-type { border-top: 0; padding-top: 0; }
+summary { cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 2px 0 6px; }
+.ctl { display: grid; grid-template-columns: 1fr 74px; gap: 2px 8px; align-items: center; padding: 4px 0; }
+.ctl label { font-size: 13px; }
+.ctl label .u { color: var(--muted); font-size: 12px; }
+.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); }
+.ctl input[type=number] { width: 74px; font: 13px var(--font-mono); padding: 3px 5px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); text-align: right; }
+.ctl .hint { grid-column: 1 / -1; font-size: 11.5px; color: var(--muted); }
+.warns { display: grid; gap: 6px; }
+.warn { font-size: 13px; border-left: 3px solid var(--warn); padding: 4px 8px; background: color-mix(in srgb, var(--warn) 10%, transparent); border-radius: 0 4px 4px 0; }
+.warn.ok { border-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+td, th { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+td.num { text-align: right; white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 12px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.bar { display: flex; height: 22px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+.bar span { display: block; height: 100%; }
+.note { font-size: 12.5px; color: var(--muted); max-width: 75ch; }
+.note p { margin: 0 0 6px; }
+.status { font-size: 12px; color: var(--muted); }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.cfdbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+.cfdbar label { font-size: 13px; display: inline-flex; gap: 5px; align-items: center; }
+.cfdbar .u { color: var(--muted); font-size: 12px; }
+.cfdbar input { accent-color: var(--accent); }
+.cfdlabel { font: 600 13px var(--font-display); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-right: auto; }
+.pill { display: inline-block; font: 600 11px var(--font-mono); padding: 2px 7px; border-radius: 99px; border: 1px solid currentColor; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Twin sirocco hood blower</h1>
+    <p>Two forward-curved Ø200 wheels in one 550 × 300 × 60 mm casing. Front inlets, merged top outlet. Change any parameter: the geometry, fan curve and power update from a 1D meanline model.</p>
+  </header>
+
+  <section class="tiles" id="tiles" aria-label="Key results"></section>
+
+  <div class="main">
+    <div style="display:grid; gap:16px; min-width:0">
+      <div class="card">
+        <div class="vbar">
+          <h2 style="margin-right:auto">3D model <span class="status" id="dims"></span></h2>
+          <div class="seg" role="group" aria-label="Front plate">
+            <button id="vFront" aria-pressed="false">Front plate</button>
+            <button id="vSpin" aria-pressed="true">Spin wheels</button>
+            <button id="vFlow" aria-pressed="true">Flow arrows</button>
+          </div>
+          <button id="vReset">Reset view</button>
+          <button id="exportBtn">Export mesh (.zip)</button>
+        </div>
+        <div class="viewer" id="viewer" aria-label="3D model, drag to orbit, scroll to zoom"></div>
+        <div class="cfdbar" role="group" aria-label="STEP export for CFD">
+          <span class="cfdlabel">STEP for CFD</span>
+          <label><input type="checkbox" id="oRot" checked> Rotating regions</label>
+          <label><input type="checkbox" id="oLids" checked> Lids</label>
+          <label><input type="checkbox" id="oFluid"> Fluid volume <span class="u">(slow, for non-SolidWorks solvers)</span></label>
+          <button class="primary" id="stepBtn">Export STEP (.zip)</button>
+        </div>
+        <div class="status" id="stepStatus">Exports separate, named solids (casing, scrolls, divider, nozzles, impellers, motor rotors and mounts, rotating regions, lids) in mm, plus a Flow Simulation setup note. Built in your browser with OpenCascade.</div>
+        <div class="status" id="exportStatus">Drag to orbit, right-drag to pan, scroll to zoom. The mesh export contains STL + OBJ in mm (for viewing or printing), the parameter set, the fan curve as CSV and a SolidWorks dimension sheet.</div>
+      </div>
+
+      <div class="charts">
+        <div class="card">
+          <h2>Pressure vs flow <span class="status">static fan pressure, total dashed</span></h2>
+          <canvas class="chart" id="cP"></canvas>
+          <div class="legend" id="legP"></div>
+        </div>
+        <div class="card">
+          <h2>Power and efficiency</h2>
+          <canvas class="chart" id="cW"></canvas>
+          <div class="legend" id="legW"></div>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="card">
+          <h2>Where the pressure goes <span class="status" id="lossTitle"></span></h2>
+          <div class="bar" id="lossBar" aria-label="Loss breakdown"></div>
+          <table id="lossTable"></table>
+          <div class="note"><p>Euler pressure is the ideal ρ·u₂·c<sub>u2</sub> after slip. Everything else is subtracted from it; the outlet dynamic pressure is what free-air delivery throws away at the 60 mm deep outlet.</p></div>
+        </div>
+        <div class="card">
+          <h2>Checks</h2>
+          <div class="warns" id="warns"></div>
+          <h2 style="margin-top:6px">Motor</h2>
+          <div class="note" id="motorNote"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Dimensions for SolidWorks <span class="status">origin at the bottom-left-back corner, x across, y up, z toward the front (inlets at z = depth)</span></h2>
+        <div class="cols">
+          <table id="dimA"></table>
+          <table id="dimB"></table>
+        </div>
+        <div class="note">
+          <p>Scroll wall: equation-driven curve in polar form about each wheel centre, r(θ) = r₀·e<sup>k(θ−θ₀)</sup> for θ₀ ≤ θ ≤ 2π (θ counter-clockwise from +x seen from the front, left fan). The right fan is the mirror image about x = L/2 and turns clockwise.</p>
+          <p>Blades: camber line with blade angle varying linearly from β₁ to β₂ (measured from the tangent, &gt;90° = forward-curved); a single circular arc between the same end angles is close enough for CFD.</p>
+        </div>
+      </div>
+
+      <div class="card note">
+        <h2>Model basis and accuracy</h2>
+        <p>Impeller: Euler work with Wiesner slip (scaled ×2 for short sirocco blades), blade blockage, 90 % volumetric efficiency for tongue and inlet-gap leakage. Losses: inlet nozzle, inlet incidence on the blade (sirocco blades always run with large incidence), passage friction, scroll mixing of the wheel exit jet down to the throat velocity, scroll friction, diffuser at 60 % recovery, disc friction. Coefficients are set so the results sit in the range of published sirocco data (peak static pressure coefficient about 1.5–1.7, peak total efficiency about 0.6–0.7).</p>
+        <p>Calibration: SolidWorks Flow Simulation of the default geometry at 130 rad/s (1241 rpm) in free air gave 354 m³/h; the uncalibrated model said 494 m³/h. The scroll friction coefficient was raised from 0.20 to 1.00, which puts the model about 3 % below that CFD point (343 m³/h), so it now errs on the cautious side. The green diamond on the pressure chart is the CFD point scaled to the current speed with the fan laws. The scroll is space-limited (spiral angle about 2.9° against roughly 4° ideal), which is where the extra loss comes from. One point fixes the free-air flow only: a second CFD point with outlet back-pressure, plus impeller torque goals, would fix the curve slope and the shaft power.</p>
+      </div>
+    </div>
+
+    <aside class="card rack" id="rack" aria-label="Parameters">
+      <div class="vbar"><h2 style="margin-right:auto">Parameters</h2><button id="resetP">Reset all</button></div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// Twin forward-curved centrifugal fan for a 550x300x60 hood blower casing.
+// Geometry derivation + 1D meanline performance model. Shared by the
+// interactive page (browser) and the Node build scripts (CAD + report).
+// Units: inputs in mm / deg / rpm / m3/h; internals SI.
+
+(function (root) {
+  const DEG = Math.PI / 180;
+  const RHO = 1.2;
+
+  const DEFAULTS = {
+    // casing
+    L: 550, H: 300, Dp: 60, tw: 2, divT: 2,
+    // wheel
+    D2: 200, d1r: 0.82, b2: 44, z: 42, beta1: 75, beta2: 160, tb: 0.8,
+    frontGap: 6, backT: 1.5,
+    // volute
+    tongueGap: 10, theta0: 35, diffLean: 8, spiralK: 0, // 0 = auto (free-vortex, capped by space)
+    // inlet / motor
+    inletD: 156, motorD: 74, motorL: 40,
+    // operating
+    rpm: 1100, Qtarget: 300, etaPSC: 0.35, etaEC: 0.72,
+    // loss model coefficients: literature-based, scroll friction raised to match the Flow Simulation result
+    // (354 m3/h free air at 130 rad/s); model now ~3 % below that CFD point
+    etaV: 0.90, kSlip: 2.0, zIn: 0.6, zInc: 0.20, zImp: 0.35, zMix: 0.45, zVf: 1.00, etaDiff: 0.6, kDf: 0.006,
+    // system curve reference: Pa at Qtarget (0 = free air only)
+    sysP: 100,
+  };
+
+  function spiralR(g, th) { return g.r0 * Math.exp(g.k * (th - g.th0)); }
+
+  function extents(r0, th0, k) {
+    let xmin = 1e9, ymin = 1e9, ymax = -1e9;
+    const N = 400;
+    for (let i = 0; i <= N; i++) {
+      const th = th0 + (2 * Math.PI - th0) * i / N;
+      const r = r0 * Math.exp(k * (th - th0));
+      xmin = Math.min(xmin, r * Math.cos(th));
+      ymin = Math.min(ymin, r * Math.sin(th));
+      ymax = Math.max(ymax, r * Math.sin(th));
+    }
+    const rEnd = r0 * Math.exp(k * (2 * Math.PI - th0));
+    return { xmin, ymin, ymax, rEnd, xmax: rEnd };
+  }
+
+  // Free-vortex ideal spiral constant: tan(alpha) = Q / (2*pi*B*cu2*r2)
+  function freeVortexK(p, B_m) {
+    const n = p.rpm, D2 = p.D2 / 1000;
+    const u2 = Math.PI * D2 * n / 60;
+    const Q = p.Qtarget / 3600 / 2;
+    const perf = stageVel(p, n, Q);
+    const K = perf.cu2 * D2 / 2;
+    return Q / (2 * Math.PI * B_m * K * p.etaV);
+  }
+
+  function geometry(pIn) {
+    const p = Object.assign({}, DEFAULTS, pIn || {});
+    const g = { p, warnings: [] };
+    g.R2 = p.D2 / 2; g.R1 = p.D2 * p.d1r / 2;
+    g.r0 = g.R2 + p.tongueGap;
+    g.th0 = p.theta0 * DEG;
+    g.B = p.Dp - 2 * p.tw;                       // volute internal depth
+    g.W = p.L / 2 - p.divT / 2 - p.tw;            // usable half width
+    // max spiral constant that fits horizontally
+    let lo = 0, hi = 0.3;
+    for (let i = 0; i < 60; i++) {
+      const m = (lo + hi) / 2, e = extents(g.r0, g.th0, m);
+      if (e.xmax - e.xmin <= g.W - 1) lo = m; else hi = m;
+    }
+    g.kMax = lo;
+    g.kFV = freeVortexK(p, g.B / 1000);
+    if (p.spiralK > 0) g.k = Math.min(p.spiralK, g.kMax);
+    else g.k = Math.min(g.kFV, g.kMax);
+    if (g.kMax <= 0.001) g.warnings.push('Wheel + tongue gap too wide for the half-width: no room for a spiral.');
+    if (g.k < g.kFV * 0.98) g.warnings.push(`Volute is space-limited: spiral angle ${(Math.atan(g.k)/DEG).toFixed(2)}° vs free-vortex ideal ${(Math.atan(g.kFV)/DEG).toFixed(2)}° (flow accelerates in the scroll).`);
+    g.alphaDeg = Math.atan(g.k) / DEG;
+    const e = extents(g.r0, g.th0, g.k);
+    g.ext = e; g.rEnd = e.rEnd;
+    // left fan centre: outlet outer wall coincides with divider face
+    g.xc = p.L / 2 - p.divT / 2 - g.rEnd;
+    g.yc = p.tw + 1 - e.ymin;
+    g.leftGap = g.xc + e.xmin - p.tw;
+    g.topGap = (p.H - p.tw) - (g.yc + e.ymax);
+    if (g.leftGap < -0.5) g.warnings.push('Scroll hits the side wall.');
+    if (g.topGap < 0) g.warnings.push('Scroll is taller than the casing: reduce D2 or tongue gap.');
+    // tongue + diffuser inner wall
+    g.tongue = [g.xc + g.r0 * Math.cos(g.th0), g.yc + g.r0 * Math.sin(g.th0)];
+    let lean = p.diffLean * DEG;
+    // make sure the lean line stays outside the spiral (to the right of it)
+    for (let iter = 0; iter < 40; iter++) {
+      let ok = true;
+      for (let i = 1; i <= 200; i++) {
+        const th = g.th0 + (Math.PI - g.th0) * i / 200;
+        const r = spiralR(g, th);
+        const x = g.xc + r * Math.cos(th), y = g.yc + r * Math.sin(th);
+        if (y <= g.tongue[1]) continue;
+        const xl = g.tongue[0] - (y - g.tongue[1]) * Math.tan(lean);
+        if (x > xl) { ok = false; break; }
+      }
+      if (ok) break; lean *= 0.85;
+    }
+    g.leanDeg = lean / DEG;
+    const yTop = p.H - p.tw;
+    g.innerTop = [g.tongue[0] - (yTop - g.tongue[1]) * Math.tan(lean), yTop];
+    g.xOuter = p.L / 2 - p.divT / 2;                  // divider face
+    g.wThroat = g.xOuter - g.tongue[0];                // mm
+    g.wOut = g.xOuter - g.innerTop[0];                 // mm (per fan)
+    g.Athroat = g.wThroat * g.B / 1e6;                 // m2
+    g.Aout = g.wOut * g.B / 1e6;
+    g.outletSlot = { x0: p.L / 2 - p.divT / 2 - g.wOut, x1: p.L / 2 + p.divT / 2 + g.wOut, w: 2 * g.wOut + p.divT, d: g.B };
+    g.Aeye = Math.PI / 4 * ((p.inletD / 1000) ** 2 - (p.motorD / 1000) ** 2);
+    if (p.inletD >= p.D2 * p.d1r) g.warnings.push('Inlet nozzle diameter should be smaller than the blade inner diameter D1.');
+    if (p.motorD >= p.inletD - 20) g.warnings.push('Motor almost blocks the inlet eye.');
+    // axial stack
+    g.zWheelFront = p.tw + p.frontGap;              // from front face
+    g.zWheelBack = g.zWheelFront + p.b2;
+    g.zBackGap = (p.Dp - p.tw) - (g.zWheelBack + p.backT);
+    if (g.zBackGap < 2) g.warnings.push(`Axial stack too deep: ${g.zBackGap.toFixed(1)} mm behind the backplate (need ≥ 2).`);
+    if (p.motorL > p.b2 + p.backT + g.zBackGap) g.warnings.push('Motor longer than the space behind the inlet.');
+    // blade camber (polar), beta varies linearly with r; theta measured in rotation direction
+    g.blade = bladeCamber(g.R1, g.R2, p.beta1 * DEG, p.beta2 * DEG);
+    return g;
+  }
+
+  function bladeCamber(R1, R2, b1, b2) {
+    const N = 24, pts = [];
+    let th = 0;
+    for (let i = 0; i <= N; i++) {
+      const r = R1 + (R2 - R1) * i / N;
+      pts.push([r, th]);
+      if (i < N) {
+        const rm = r + (R2 - R1) / N / 2;
+        const bm = b1 + (b2 - b1) * (rm - R1) / (R2 - R1);
+        th += -(1 / (rm * Math.tan(bm))) * (R2 - R1) / N;
+      }
+    }
+    return pts; // [r(mm), theta(rad)]
+  }
+
+  function stageVel(p, n, Qfan) {
+    const D2 = p.D2 / 1000, D1 = D2 * p.d1r, b2 = p.b2 / 1000, tb = p.tb / 1000;
+    const b1r = p.beta1 * DEG, b2r = p.beta2 * DEG;
+    const u2 = Math.PI * D2 * n / 60, u1 = u2 * p.d1r;
+    const Qi = Qfan / p.etaV;
+    const tau2 = Math.max(0.5, 1 - p.z * tb / (Math.PI * D2 * Math.sin(b2r)));
+    const tau1 = Math.max(0.5, 1 - p.z * tb / (Math.PI * D1 * Math.sin(b1r)));
+    const cm2 = Qi / (Math.PI * D2 * b2 * tau2);
+    const cm1 = Qi / (Math.PI * D1 * b2 * tau1);
+    const sigma = 1 - p.kSlip * Math.sqrt(Math.sin(b2r)) / Math.pow(p.z, 0.7); // Wiesner
+    const cu2 = sigma * u2 - cm2 / Math.tan(b2r);
+    return { u1, u2, Qi, cm1, cm2, cu2, sigma, b1r };
+  }
+
+  // Performance of the twin unit at speed n (rpm) and total flow Qtot (m3/h)
+  function perf(g, n, QtotM3h) {
+    const p = g.p;
+    const Q = QtotM3h / 3600 / 2;           // per fan, m3/s
+    const v = stageVel(p, n, Q);
+    const q = RHO / 2;
+    const pth = RHO * v.u2 * v.cu2;
+    const ceye = v.Qi / g.Aeye;
+    const b1f = Math.atan2(v.cm1, v.u1);
+    const w1 = Math.hypot(v.u1, v.cm1);
+    const w2 = Math.hypot(v.cm2, v.u2 - v.cu2);
+    const c3 = Q / g.Athroat, cout = Q / g.Aout;
+    const c2 = Math.hypot(v.cu2, v.cm2);
+    const L = {
+      inlet: p.zIn * q * ceye ** 2,
+      incidence: p.zInc * q * (w1 * Math.sin(v.b1r - b1f)) ** 2,
+      impeller: p.zImp * q * (w1 ** 2 + w2 ** 2) / 2,
+      volute: p.zMix * q * (c2 - c3) ** 2 * (c2 >= c3 ? 1 : 0.4) + p.zVf * q * c3 ** 2,
+      diffuser: (1 - p.etaDiff) * q * Math.max(0, c3 ** 2 - cout ** 2),
+    };
+    const Ltot = Object.values(L).reduce((a, b) => a + b, 0);
+    const dpt = pth - Ltot;
+    const pdynOut = q * cout ** 2;
+    const dps = dpt - pdynOut;
+    const omega = 2 * Math.PI * n / 60;
+    const Pdf = p.kDf * RHO * omega ** 3 * (p.D2 / 2000) ** 5;
+    const PshaftFan = RHO * v.Qi * v.u2 * v.cu2 + Pdf;
+    const Pshaft = 2 * PshaftFan;
+    const Qt = 2 * Q;
+    return {
+      n, Q: QtotM3h, u2: v.u2, cu2: v.cu2, cm2: v.cm2, sigma: v.sigma,
+      pth, losses: L, dpt, dps, pdynOut, c3, cout, ceye,
+      Pair_t: Qt * dpt, Pair_s: Qt * Math.max(0, dps), Pshaft,
+      etaT: Qt * dpt / Pshaft, etaS: Qt * Math.max(0, dps) / Pshaft,
+      PelPSC: Pshaft / p.etaPSC, PelEC: Pshaft / p.etaEC,
+      psiT: dpt / (q * v.u2 ** 2), psiS: dps / (q * v.u2 ** 2),
+      phi: Q / (v.u2 * Math.PI / 4 * (p.D2 / 1000) ** 2),
+    };
+  }
+
+  function solveQ(g, n, f) { // find Q where f(perf) = 0, f decreasing in Q
+    let lo = 1, hi = 3000;
+    if (f(perf(g, n, lo)) < 0) return 0;
+    for (let i = 0; i < 70; i++) { const m = (lo + hi) / 2; if (f(perf(g, n, m)) > 0) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  }
+  function freeAirQ(g, n) { return solveQ(g, n, r => r.dps); }
+  function sysK(g) { return g.p.sysP / g.p.Qtarget ** 2; }
+  function dutyQ(g, n, K) { return solveQ(g, n, r => r.dps - K * r.Q ** 2); }
+  function rpmFor(g, Qwant, K) { // lowest rpm that delivers Qwant against K*Q^2
+    let lo = 100, hi = 6000;
+    for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (dutyQ(g, m, K) >= Qwant) hi = m; else lo = m; }
+    return hi;
+  }
+  function curve(g, n, N) {
+    const Qmax = freeAirQ(g, n) * 1.02, out = [];
+    for (let i = 0; i <= N; i++) out.push(perf(g, n, Math.max(1, Qmax * i / N)));
+    return out;
+  }
+
+  const api = { DEFAULTS, geometry, perf, curve, freeAirQ, dutyQ, rpmFor, sysK, spiralR, DEG, RHO };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.FanModel = api;
+})(this);
+
+</script>
+<script>
+(function () {
+const F = window.FanModel, DEG = F.DEG;
+// SolidWorks Flow Simulation results used to calibrate the model (free air = 0 Pa static)
+const CFD_POINTS = [{ rpm: 130 * 60 / (2 * Math.PI), Q: 0.0983 * 3600, dps: 0, note: '130 rad/s, averaged outlet flow' }];
+const P = Object.assign({}, F.DEFAULTS);
+
+// ------------------------------------------------------------ parameter rack
+const GROUPS = [
+  ['Operating point', true, [
+    ['rpm', 'Wheel speed', 'rpm', 400, 1500, 10, 'User limit 1500 rpm. PSC motors run about 1350 (4-pole) or 920 (6-pole) under load.'],
+    ['Qtarget', 'Target flow', 'm³/h', 100, 600, 10],
+    ['sysP', 'System resistance at target flow', 'Pa', 0, 400, 5, 'Quadratic system curve through this point, e.g. ~60–100 Pa for a grease filter, ~200 Pa with 1–2 m of duct. 0 = free air only.'],
+    ['etaPSC', 'PSC motor efficiency', '–', 0.25, 0.65, 0.01],
+    ['etaEC', 'EC motor + drive efficiency', '–', 0.5, 0.85, 0.01],
+  ]],
+  ['Wheel', true, [
+    ['D2', 'Outer diameter D₂', 'mm', 150, 220, 1],
+    ['d1r', 'Diameter ratio D₁/D₂', '–', 0.70, 0.90, 0.01],
+    ['b2', 'Blade width b₂', 'mm', 20, 50, 1],
+    ['z', 'Number of blades', '–', 24, 64, 1],
+    ['beta1', 'Inlet blade angle β₁', '°', 40, 110, 1],
+    ['beta2', 'Outlet blade angle β₂', '°', 110, 175, 1, 'Measured from the tangent; above 90° is forward-curved.'],
+    ['tb', 'Blade thickness', 'mm', 0.4, 2, 0.1],
+  ]],
+  ['Scroll and outlet', false, [
+    ['tongueGap', 'Tongue clearance', 'mm', 4, 30, 1, 'Smaller gives more pressure but more blade-pass noise; 5–8 % of D₂ is usual.'],
+    ['theta0', 'Tongue angle θ₀', '°', 15, 60, 1],
+    ['spiralK', 'Spiral constant k (0 = auto)', '–', 0, 0.12, 0.002, 'Auto uses the free-vortex value, capped by the space available.'],
+    ['diffLean', 'Outlet diffuser lean', '°', 0, 14, 0.5],
+    ['divT', 'Divider thickness', 'mm', 1, 4, 0.5],
+  ]],
+  ['Casing, inlet, motor', false, [
+    ['L', 'Casing width', 'mm', 400, 700, 5],
+    ['H', 'Casing height', 'mm', 220, 400, 5],
+    ['Dp', 'Casing depth', 'mm', 40, 100, 1],
+    ['tw', 'Wall thickness', 'mm', 1, 3, 0.5],
+    ['frontGap', 'Front wall to wheel gap', 'mm', 3, 15, 0.5],
+    ['inletD', 'Inlet nozzle throat Ø', 'mm', 100, 180, 1],
+    ['motorD', 'Motor rotor Ø', 'mm', 40, 110, 1],
+    ['motorL', 'Motor length', 'mm', 20, 60, 1],
+  ]],
+  ['Loss model (calibrate to CFD)', false, [
+    ['kSlip', 'Slip multiplier', '–', 0.5, 4, 0.1],
+    ['etaV', 'Volumetric efficiency', '–', 0.75, 1, 0.01],
+    ['zIn', 'Inlet loss ζ', '–', 0, 2, 0.05],
+    ['zInc', 'Incidence loss ζ', '–', 0, 1, 0.01],
+    ['zImp', 'Passage loss ζ', '–', 0, 1, 0.01],
+    ['zMix', 'Scroll mixing ζ', '–', 0, 1, 0.01],
+    ['zVf', 'Scroll friction ζ', '–', 0, 1, 0.01],
+    ['etaDiff', 'Diffuser recovery', '–', 0, 0.9, 0.01],
+  ]],
+];
+const rack = document.getElementById('rack');
+const inputs = {};
+for (const [title, open, ctls] of GROUPS) {
+  const det = document.createElement('details'); if (open) det.open = true;
+  det.innerHTML = `<summary>${title}</summary>`;
+  for (const [key, label, unit, min, max, step, hint] of ctls) {
+    const row = document.createElement('div'); row.className = 'ctl';
+    const id = 'p_' + key;
+    row.innerHTML = `<label for="${id}">${label} <span class="u">${unit === '–' ? '' : unit}</span></label>
+      <input type="number" id="${id}" min="${min}" max="${max}" step="${step}">
+      <input type="range" id="${id}_r" aria-label="${label}" min="${min}" max="${max}" step="${step}">
+      ${hint ? `<div class="hint">${hint}</div>` : ''}`;
+    det.appendChild(row);
+    const num = row.querySelector('input[type=number]'), rng = row.querySelector('input[type=range]');
+    inputs[key] = { num, rng };
+    const set = (v) => { v = parseFloat(v); if (!isFinite(v)) return; P[key] = v; num.value = v; rng.value = v; schedule(); };
+    num.addEventListener('change', e => set(e.target.value));
+    rng.addEventListener('input', e => set(e.target.value));
+  }
+  rack.appendChild(det);
+}
+function syncInputs() { for (const k in inputs) { inputs[k].num.value = +(+P[k]).toPrecision(6); inputs[k].rng.value = P[k]; } }
+document.getElementById('resetP').onclick = () => { Object.assign(P, F.DEFAULTS); syncInputs(); schedule(); };
+syncInputs();
+
+// ------------------------------------------------------------ helpers
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (v, d = 0) => (isFinite(v) ? v.toFixed(d) : '–');
+
+let G = null, R = null;
+let pending = false;
+function schedule() { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; recompute(); }); }
+
+function recompute() {
+  G = F.geometry(P);
+  const n = P.rpm, K = F.sysK(G);
+  const qFree = F.freeAirQ(G, n);
+  const qDuty = P.sysP > 0 ? F.dutyQ(G, n, K) : qFree;
+  const atT = F.perf(G, n, P.Qtarget);
+  const atD = F.perf(G, n, Math.max(1, qDuty));
+  const rpmFree = F.rpmFor(G, P.Qtarget, 0);
+  const rpmSys = P.sysP > 0 ? F.rpmFor(G, P.Qtarget, K) : rpmFree;
+  // pressure available at target flow at the 1500 rpm limit
+  const at1500 = F.perf(G, 1500, P.Qtarget);
+  R = { n, K, qFree, qDuty, atT, atD, rpmFree, rpmSys, at1500 };
+  renderTiles(); renderCharts(); renderLoss(); renderChecks(); renderDims(); rebuild3D();
+}
+
+function tile(k, v, unit, s, hl) { return `<div class="tile${hl ? ' hl' : ''}"><span class="k">${k}</span><span class="v">${v} <small>${unit}</small></span>${s ? `<span class="s">${s}</span>` : ''}</div>`; }
+function renderTiles() {
+  const { n, qFree, qDuty, atT, rpmFree, rpmSys, at1500 } = R;
+  const meets = qFree >= P.Qtarget;
+  document.getElementById('tiles').innerHTML =
+    tile(`Free-air flow at ${n} rpm`, fmt(qFree), 'm³/h', meets ? `≥ target ${P.Qtarget}` : `below target ${P.Qtarget}`, true) +
+    tile(`Speed for ${P.Qtarget} m³/h, free air`, fmt(rpmFree), 'rpm', rpmFree <= 1500 ? 'within the 1500 rpm limit' : 'over the 1500 rpm limit') +
+    tile(`Static pressure at ${P.Qtarget} m³/h`, fmt(atT.dps), 'Pa', `${fmt(at1500.dps)} Pa at 1500 rpm`) +
+    (P.sysP > 0 ? tile('Duty point on system curve', fmt(qDuty), 'm³/h', `needs ${fmt(rpmSys)} rpm for ${P.Qtarget} m³/h`) : '') +
+    tile(`Shaft power at ${P.Qtarget} m³/h`, fmt(atT.Pshaft, 1), 'W', `both wheels, ${n} rpm`) +
+    tile('Electrical input', `${fmt(atT.PelPSC)} / ${fmt(atT.PelEC)}`, 'W', 'PSC / EC') +
+    tile('Efficiency, static / total', `${fmt(atT.etaS * 100)} / ${fmt(atT.etaT * 100)}`, '%', 'fan only, no motor') +
+    tile('Outlet velocity', fmt(atT.cout, 1), 'm/s', `slot ${fmt(G.outletSlot.w)} × ${fmt(G.B)} mm`);
+}
+
+// ------------------------------------------------------------ charts (canvas)
+function setupCanvas(c) {
+  const dpr = window.devicePixelRatio || 1, r = c.getBoundingClientRect();
+  c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr);
+  const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+function niceStep(range, n) { const raw = range / n, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p; }
+function axes(ctx, w, h, pad, xmax, ymax, xlab, ylab, y2) {
+  const X = q => pad.l + (w - pad.l - pad.r) * q / xmax, Y = v => h - pad.b - (h - pad.t - pad.b) * v / ymax;
+  ctx.font = '11px ' + css('--font-mono'); ctx.strokeStyle = css('--grid'); ctx.fillStyle = css('--muted'); ctx.lineWidth = 1;
+  const sx = niceStep(xmax, 6), sy = niceStep(ymax, 5);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let x = 0; x <= xmax + 1e-9; x += sx) { ctx.beginPath(); ctx.moveTo(X(x), Y(0)); ctx.lineTo(X(x), pad.t); ctx.stroke(); ctx.fillText(+x.toFixed(6), X(x), h - pad.b + 4); }
+  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (let y = 0; y <= ymax + 1e-9; y += sy) { ctx.beginPath(); ctx.moveTo(pad.l, Y(y)); ctx.lineTo(w - pad.r, Y(y)); ctx.stroke(); ctx.fillText(+y.toFixed(6), pad.l - 5, Y(y)); }
+  if (y2) { ctx.textAlign = 'left'; for (let f = 0; f <= 1.0001; f += 0.2) ctx.fillText(Math.round(f * 100) + '%', w - pad.r + 5, Y(f * ymax)); }
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillText(xlab, (pad.l + w - pad.r) / 2, h - 1);
+  ctx.save(); ctx.translate(11, (pad.t + h - pad.b) / 2); ctx.rotate(-Math.PI / 2); ctx.textBaseline = 'middle'; ctx.fillText(ylab, 0, 0); ctx.restore();
+  if (y2) { ctx.save(); ctx.translate(w - 7, (pad.t + h - pad.b) / 2); ctx.rotate(Math.PI / 2); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(y2, 0, 0); ctx.restore(); }
+  return { X, Y };
+}
+function line(ctx, pts, X, Y, color, width, dash) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash || []); ctx.lineJoin = 'round';
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y))); ctx.stroke(); ctx.restore();
+}
+function dot(ctx, x, y, color, label, align) {
+  ctx.save(); ctx.fillStyle = color; ctx.strokeStyle = css('--panel'); ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(x, y, 5, 0, 7); ctx.fill(); ctx.stroke();
+  if (label) { ctx.font = '600 11px ' + css('--font-mono'); ctx.fillStyle = css('--ink'); ctx.textAlign = align || 'left'; ctx.textBaseline = 'bottom'; ctx.fillText(label, x + (align === 'right' ? -8 : 8), y - 6); }
+  ctx.restore();
+}
+function legend(id, items) { document.getElementById(id).innerHTML = items.map(([c, t, d]) => `<span><i class="${d ? 'd' : ''}" style="background:${c};color:${c}"></i>${t}</span>`).join(''); }
+
+function renderCharts() {
+  const n = R.n, acc = css('--accent'), wh = css('--wheel'), mu = css('--muted'), ec = css('--ec');
+  const cur = F.curve(G, n, 60);
+  const others = [750, 1000, 1250, 1500].filter(r => Math.abs(r - n) > 40).map(r => ({ r, c: F.curve(G, r, 40) }));
+  const qmaxAll = Math.max(F.freeAirQ(G, Math.max(n, 1500)), P.Qtarget * 1.2);
+  const xmax = niceStep(qmaxAll, 6) * Math.ceil(qmaxAll / niceStep(qmaxAll, 6));
+  const pmaxRaw = Math.max(...cur.map(r => r.dpt), ...others.flatMap(o => o.c.map(r => r.dps)), P.sysP * 1.3, 50);
+  const ymax = niceStep(pmaxRaw, 5) * Math.ceil(pmaxRaw / niceStep(pmaxRaw, 5));
+  { // pressure chart
+    const { ctx, w, h } = setupCanvas(document.getElementById('cP'));
+    const pad = { l: 46, r: 14, t: 12, b: 34 };
+    const { X, Y } = axes(ctx, w, h, pad, xmax, ymax, 'flow  Q  [m³/h]', 'pressure  [Pa]');
+    ctx.save(); ctx.beginPath(); ctx.rect(pad.l, pad.t, w - pad.l - pad.r, h - pad.t - pad.b); ctx.clip();
+    for (const o of others) {
+      line(ctx, o.c.map(r => [r.Q, r.dps]), X, Y, mu, 1, [2, 3]);
+      const pk = o.c.reduce((a, r) => r.dps > a.dps ? r : a, o.c[0]);
+      ctx.font = '10px ' + css('--font-mono'); ctx.fillStyle = mu; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillText(o.r + ' rpm', X(pk.Q), Y(pk.dps) - 3);
+    }
+    // shaded target
+    ctx.strokeStyle = mu; ctx.setLineDash([1, 3]); ctx.beginPath(); ctx.moveTo(X(P.Qtarget), Y(0)); ctx.lineTo(X(P.Qtarget), pad.t); ctx.stroke(); ctx.setLineDash([]);
+    if (P.sysP > 0) { const sys = []; for (let q = 0; q <= xmax; q += xmax / 60) sys.push([q, R.K * q * q]); line(ctx, sys, X, Y, wh, 2); }
+    line(ctx, cur.map(r => [r.Q, r.dpt]), X, Y, acc, 1.5, [6, 4]);
+    line(ctx, cur.map(r => [r.Q, Math.max(r.dps, -5)]), X, Y, acc, 2.6);
+    ctx.restore();
+    dot(ctx, X(R.qFree), Y(0), acc, `free air ${fmt(R.qFree)}`, R.qFree > xmax * 0.7 ? 'right' : 'left');
+    for (const c of CFD_POINTS) { const k = n / c.rpm, qx = c.Q * k, py = c.dps * k * k; ctx.save(); ctx.translate(X(qx), Y(py)); ctx.rotate(Math.PI / 4); ctx.fillStyle = css('--ec'); ctx.strokeStyle = css('--panel'); ctx.lineWidth = 2; ctx.fillRect(-5, -5, 10, 10); ctx.strokeRect(-5, -5, 10, 10); ctx.restore(); ctx.font = '600 11px ' + css('--font-mono'); ctx.fillStyle = css('--ec'); ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(`CFD ${fmt(qx)}`, X(qx) + 9, Y(py) - 26); }
+    if (P.sysP > 0) dot(ctx, X(R.qDuty), Y(R.atD.dps), wh, `${fmt(R.qDuty)} m³/h · ${fmt(R.atD.dps)} Pa`, R.qDuty > xmax * 0.6 ? 'right' : 'left');
+    dot(ctx, X(P.Qtarget), Y(Math.max(0, R.atT.dps)), css('--ink'), `${fmt(R.atT.dps)} Pa at ${P.Qtarget}`, P.Qtarget > xmax * 0.6 ? 'right' : 'left');
+    legend('legP', [[css('--ec'), 'CFD result, scaled to this speed'], [acc, `static, ${n} rpm`], [acc, 'total', 1], [mu, 'static at other speeds', 1]].concat(P.sysP > 0 ? [[wh, `system curve (${P.sysP} Pa at ${P.Qtarget} m³/h)`]] : []));
+  }
+  { // power chart
+    const { ctx, w, h } = setupCanvas(document.getElementById('cW'));
+    const pad = { l: 40, r: 52, t: 12, b: 34 };
+    const xm = niceStep(R.qFree * 1.02, 5) * Math.ceil(R.qFree * 1.02 / niceStep(R.qFree * 1.02, 5));
+    const wmaxRaw = Math.max(...cur.map(r => r.PelPSC), 10);
+    const wmax = niceStep(wmaxRaw, 5) * Math.ceil(wmaxRaw / niceStep(wmaxRaw, 5));
+    const { X, Y } = axes(ctx, w, h, pad, xm, wmax, 'flow  Q  [m³/h]', 'power  [W]', 'efficiency');
+    const E = v => Y(v * wmax);
+    ctx.save(); ctx.beginPath(); ctx.rect(pad.l, pad.t, w - pad.l - pad.r, h - pad.t - pad.b); ctx.clip();
+    line(ctx, cur.map(r => [r.Q, r.PelPSC]), X, Y, wh, 2.2);
+    line(ctx, cur.map(r => [r.Q, r.PelEC]), X, Y, ec, 2.2);
+    line(ctx, cur.map(r => [r.Q, r.Pshaft]), X, Y, css('--ink'), 1.6);
+    line(ctx, cur.map(r => [r.Q, r.etaT * wmax]), X, Y, acc, 1.4, [6, 4]);
+    line(ctx, cur.map(r => [r.Q, Math.max(0, r.etaS) * wmax]), X, Y, acc, 1.4, [2, 3]);
+    ctx.restore();
+    if (P.Qtarget < xm) { dot(ctx, X(P.Qtarget), Y(R.atT.PelPSC), wh, `${fmt(R.atT.PelPSC)} W`, P.Qtarget > xm * .6 ? 'right' : 'left'); dot(ctx, X(P.Qtarget), Y(R.atT.PelEC), ec, `${fmt(R.atT.PelEC)} W`, P.Qtarget > xm * .6 ? 'right' : 'left'); }
+    legend('legW', [[wh, 'electrical, PSC'], [ec, 'electrical, EC'], [css('--ink'), 'shaft'], [acc, 'η total', 1], [acc, 'η static', 1]]);
+  }
+}
+
+function renderLoss() {
+  const r = R.atT, Ls = r.losses;
+  const parts = [['Inlet nozzle', Ls.inlet], ['Blade incidence', Ls.incidence], ['Passage', Ls.impeller], ['Scroll', Ls.volute], ['Diffuser', Ls.diffuser], ['Outlet dynamic', r.pdynOut], ['Static pressure delivered', Math.max(0, r.dps)]];
+  const cols = ['#8a96a3', '#a6b0bb', '#c0c7cf', css('--wheel'), '#e3b38c', css('--warn'), css('--accent')];
+  const tot = parts.reduce((a, p) => a + p[1], 0);
+  document.getElementById('lossTitle').textContent = `at ${P.Qtarget} m³/h, ${R.n} rpm`;
+  document.getElementById('lossBar').innerHTML = parts.map((p, i) => `<span title="${p[0]} ${fmt(p[1])} Pa" style="width:${100 * p[1] / tot}%;background:${cols[i]}"></span>`).join('');
+  document.getElementById('lossTable').innerHTML = `<tr><th>Euler pressure after slip</th><td class="num">${fmt(r.pth)} Pa</td><td class="num">100 %</td></tr>` +
+    parts.map((p, i) => `<tr><td><span class="sw" style="background:${cols[i]}"></span> ${p[0]}</td><td class="num">${fmt(p[1])} Pa</td><td class="num">${fmt(100 * p[1] / r.pth)} %</td></tr>`).join('');
+}
+
+function renderChecks() {
+  const w = G.warnings.slice();
+  if (P.rpm > 1500) w.push('Speed above the 1500 rpm limit.');
+  if (R.rpmFree > 1500) w.push(`The target flow needs ${fmt(R.rpmFree)} rpm in free air, above the 1500 rpm limit.`);
+  if (R.atT.cout > 12) w.push(`Outlet velocity ${fmt(R.atT.cout, 1)} m/s is high: expect noise at the outlet.`);
+  const ok = [];
+  if (!G.warnings.some(s => /hits|taller|too deep|too wide/i.test(s))) ok.push(`Everything fits in ${P.L} × ${P.H} × ${P.Dp} mm (scroll side gap ${fmt(G.leftGap, 1)} mm, top gap ${fmt(G.topGap, 1)} mm, ${fmt(G.zBackGap, 1)} mm behind the backplate).`);
+  if (R.rpmFree <= 1500) ok.push(`${P.Qtarget} m³/h in free air from ${fmt(R.rpmFree)} rpm; at 1500 rpm the same flow is delivered against ${fmt(R.at1500.dps)} Pa.`);
+  document.getElementById('warns').innerHTML = w.map(s => `<div class="warn">${s}</div>`).join('') + ok.map(s => `<div class="warn ok">${s}</div>`).join('');
+  // per-motor requirement (free air is the highest-load point for a forward-curved fan)
+  const tq = (n) => { const q = F.freeAirQ(G, n), r = F.perf(G, n, q); const P1 = r.Pshaft / 2; return { n, q, P1, T: P1 / (n * 2 * Math.PI / 60), elPSC: r.PelPSC / 2, elEC: r.PelEC / 2 }; };
+  const nD = Math.min(1500, R.rpmFree), dD = tq(nD), dM = tq(1500), dC = tq(P.rpm);
+  const maxD = 0.5 * P.inletD, maxL = P.b2 + P.backT + G.zBackGap;
+  const row = (lab, d) => `<tr><td>${lab}</td><td class="num">${fmt(d.n)} rpm</td><td class="num">${fmt(d.q)} m³/h</td><td class="num">${fmt(d.T * 1000)} mN·m</td><td class="num">${fmt(d.P1, 1)} W</td><td class="num">${fmt(d.elPSC)} / ${fmt(d.elEC)} W</td></tr>`;
+  document.getElementById('motorNote').innerHTML = `
+    <p>One external-rotor motor per wheel, sitting inside the wheel, one turning each way. Values are <b>per motor</b> at free air, the heaviest load for a forward-curved wheel.</p>
+    <table><tr><th></th><th>Speed</th><th>Free-air flow, total</th><th>Torque</th><th>Shaft</th><th>Input PSC / EC</th></tr>
+    ${row(`Design (${P.Qtarget} m³/h)`, dD)}${row('Current setting', dC)}${row('Maximum', dM)}</table>
+    <p><b>Specify:</b> rated torque ≥ ${fmt(dM.T * 1250)} mN·m and ≥ ${fmt(Math.ceil(dM.P1 * 1.25 / 5) * 5)} W shaft output at 1500 rpm (25 % margin, as the model's shaft power is not CFD-checked yet), speed range ${fmt(Math.floor(nD / 50) * 50)}–1500 rpm, rotor Ø ≤ ${fmt(maxD)} mm (keeps 75 % of the inlet eye open), length inside the casing ≤ ${fmt(maxL, 0)} mm, CW and CCW versions.</p>`;
+}
+
+function renderDims() {
+  const g = G, p = P;
+  const rows = (arr) => arr.map(([k, v, u]) => `<tr><td>${k}</td><td class="num">${v} ${u || ''}</td></tr>`).join('');
+  document.getElementById('dims').textContent = `${p.L} × ${p.H} × ${p.Dp} mm`;
+  document.getElementById('dimA').innerHTML = '<tr><th>Wheel (each)</th><th></th></tr>' + rows([
+    ['D₂ / D₁', `${fmt(p.D2, 1)} / ${fmt(p.D2 * p.d1r, 1)}`, 'mm'], ['Blade width b₂', fmt(p.b2, 1), 'mm'], ['Blades z', p.z],
+    ['β₁ → β₂ (from tangent)', `${fmt(p.beta1)}° → ${fmt(p.beta2)}°`], ['Blade wrap angle', fmt(g.blade[g.blade.length - 1][1] / DEG, 1), '°'], ['Blade thickness', fmt(p.tb, 1), 'mm'],
+    ['Wheel front plane', `z = ${fmt(p.Dp - g.zWheelFront, 1)}`, 'mm'], ['Backplate', `z = ${fmt(p.Dp - g.zWheelBack - p.backT, 1)} … ${fmt(p.Dp - g.zWheelBack, 1)}`, 'mm'],
+    ['Centre left / right', `x = ${fmt(g.xc, 1)} / ${fmt(p.L - g.xc, 1)}, y = ${fmt(g.yc, 1)}`, 'mm'],
+    ['Inlet nozzle throat Ø / face Ø', `${fmt(p.inletD)} / ${fmt(p.inletD + 10)}`, 'mm'],
+  ]);
+  document.getElementById('dimB').innerHTML = '<tr><th>Scroll (left fan)</th><th></th></tr>' + rows([
+    ['Start radius r₀ (tongue)', fmt(g.r0, 1), 'mm'], ['Tongue angle θ₀', fmt(p.theta0, 1), '°'],
+    ['Spiral constant k', g.k.toFixed(4), ''], ['Spiral angle', fmt(g.alphaDeg, 2), '°'], ['End radius at θ = 2π', fmt(g.rEnd, 1), 'mm'],
+    ['Tongue point', `(${fmt(g.tongue[0], 1)}, ${fmt(g.tongue[1], 1)})`, 'mm'],
+    ['Diffuser inner wall to', `(${fmt(g.innerTop[0], 1)}, ${fmt(g.innerTop[1], 1)}), lean ${fmt(g.leanDeg, 1)}°`, 'mm'],
+    ['Throat width × depth', `${fmt(g.wThroat, 1)} × ${fmt(g.B, 1)}`, 'mm'],
+    ['Outlet slot (top face)', `x ${fmt(g.outletSlot.x0, 1)} … ${fmt(g.outletSlot.x1, 1)} (${fmt(g.outletSlot.w, 1)} × ${fmt(g.B, 1)})`, 'mm'],
+  ]);
+}
+
+// ------------------------------------------------------------ 3D
+const viewer = document.getElementById('viewer');
+let paused = false, renderer, scene, camera, controls, model, wheels = [], flowGroup, spin = true, showFront = false, showFlow = true;
+function init3D() {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  viewer.appendChild(renderer.domElement);
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(35, 1, 5, 5000);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8090a0, 0.85));
+  const d1 = new THREE.DirectionalLight(0xffffff, 0.75); d1.position.set(300, 500, 700); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, 0.3); d2.position.set(-400, -200, -300); scene.add(d2);
+  resetView(); resize3D();
+  new ResizeObserver(resize3D).observe(viewer);
+  let last = performance.now();
+  (function loop(t) {
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (spin && !reduce) { const w = (P.rpm / 60) * 2 * Math.PI * 0.08; wheels.forEach(o => o.rotation.z += o.userData.dir * w * dt); }
+    if (flowGroup && showFlow && !reduce) flowGroup.children.forEach(a => { a.userData.t = (a.userData.t + dt * 0.5) % 1; a.userData.place(a, a.userData.t); });
+    if (!paused) { controls.update(); renderer.render(scene, camera); } requestAnimationFrame(loop);
+  })(last);
+}
+function resetView() { camera.position.set(275 + 230, 150 + 260, 30 + 820); controls.target.set(275, 150, 30); controls.update(); }
+function resize3D() { const w = viewer.clientWidth, h = viewer.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+
+function mat(color, opts) { return new THREE.MeshStandardMaterial(Object.assign({ color, metalness: 0.15, roughness: 0.6, side: THREE.DoubleSide }, opts || {})); }
+function boxMesh(x0, y0, z0, x1, y1, z1, m) { const g = new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0); const o = new THREE.Mesh(g, m); o.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2); return o; }
+function extrudePoly(pts, depth, z0, m, holes) {
+  const s = new THREE.Shape(pts.map(p => new THREE.Vector2(p[0], p[1])));
+  (holes || []).forEach(h => s.holes.push(h));
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 48 });
+  const o = new THREE.Mesh(g, m); o.position.z = z0; return o;
+}
+
+function rebuild3D() {
+  if (!renderer) return;
+  if (model) { scene.remove(model); model.traverse(o => { if (o.geometry) o.geometry.dispose(); }); }
+  model = new THREE.Group(); wheels = [];
+  const g = G, p = P, tw = p.tw, L = p.L, H = p.H, Dp = p.Dp, B = g.B, WALL = 1.6;
+  const mCase = mat(0xb9c2cc, { roughness: 0.75 }), mScroll = mat(0x8e9aa8), mFront = mat(0xc7d0da, { transparent: true, opacity: 0.28, depthWrite: false });
+  const mWheel = mat(new THREE.Color(css('--wheel') || '#d9732b'), { metalness: 0.3, roughness: 0.45 }), mMotor = mat(0x2a2e33, { metalness: 0.5, roughness: 0.4 });
+  const casing = new THREE.Group(); casing.name = 'casing';
+  casing.add(boxMesh(0, 0, 0, L, H, tw, mCase));                 // back plate
+  casing.add(boxMesh(0, 0, tw, tw, H, Dp - tw, mCase));          // left
+  casing.add(boxMesh(L - tw, 0, tw, L, H, Dp - tw, mCase));      // right
+  casing.add(boxMesh(tw, 0, tw, L - tw, tw, Dp - tw, mCase));    // bottom
+  const s = g.outletSlot;                                         // top with slot
+  casing.add(boxMesh(tw, H - tw, tw, s.x0, H, Dp - tw, mCase));
+  casing.add(boxMesh(s.x1, H - tw, tw, L - tw, H, Dp - tw, mCase));
+  casing.add(boxMesh(L / 2 - p.divT / 2, tw, tw, L / 2 + p.divT / 2, H, Dp - tw, mScroll)); // divider to the top face
+  const front = (() => {
+    const holes = [g.xc, L - g.xc].map(x => { const h = new THREE.Path(); h.absarc(x, g.yc, p.inletD / 2 + 5, 0, Math.PI * 2, true); return h; });
+    const o = extrudePoly([[0, 0], [L, 0], [L, H], [0, H]], tw, Dp - tw, mFront, holes); o.name = 'front_plate'; o.visible = showFront; o.renderOrder = 2; return o;
+  })();
+  casing.add(front);
+  // scroll walls
+  const N = 160, inner = [], outer = [];
+  for (let i = 0; i <= N; i++) { const th = g.th0 + (2 * Math.PI - g.th0) * i / N, r = F.spiralR(g, th); inner.push([g.xc + r * Math.cos(th), g.yc + r * Math.sin(th)]); outer.push([g.xc + (r + WALL) * Math.cos(th), g.yc + (r + WALL) * Math.sin(th)]); }
+  const lean = g.leanDeg * DEG, nx = -Math.cos(lean), ny = -Math.sin(lean);
+  const tongue = [g.tongue, g.innerTop, [g.innerTop[0] + nx * WALL, g.innerTop[1] + ny * WALL], [g.tongue[0] + nx * WALL, g.tongue[1] + ny * WALL]];
+  for (const mirror of [false, true]) {
+    const mx = q => mirror ? [L - q[0], q[1]] : q;
+    const wallPts = inner.concat(outer.slice().reverse()).map(mx);
+    const tp = tongue.map(mx);
+    if (mirror) { wallPts.reverse(); tp.reverse(); }
+    casing.add(extrudePoly(wallPts, B, tw, mScroll));
+    casing.add(extrudePoly(tp, B, tw, mScroll));
+    // bellmouth
+    const prof = []; const rb = 5, rin = p.inletD / 2;
+    for (let i = 0; i <= 12; i++) { const a = Math.PI / 2 * i / 12; prof.push(new THREE.Vector2(rin + rb - rb * Math.sin(a), -rb * (1 - Math.cos(a)))); }
+    for (let i = 12; i >= 0; i--) { const a = Math.PI / 2 * i / 12; prof.push(new THREE.Vector2(rin + rb - rb * Math.sin(a) + 1.2, -rb * (1 - Math.cos(a)))); }
+    const bm = new THREE.Mesh(new THREE.LatheGeometry(prof, 64), mScroll);
+    bm.rotation.x = Math.PI / 2; bm.position.set(mirror ? L - g.xc : g.xc, g.yc, Dp - tw); casing.add(bm);
+  }
+  model.add(casing);
+  // wheels
+  for (const right of [false, true]) {
+    const wg = new THREE.Group(); wg.name = right ? 'wheel_right_CW' : 'wheel_left_CCW';
+    const zb = Dp - g.zWheelBack, zf = Dp - g.zWheelFront;
+    const cam = g.blade;
+    for (let i = 0; i < p.z; i++) {
+      const phi = 2 * Math.PI * i / p.z;
+      const up = cam.map(([r, th]) => [r * Math.cos(phi + th + p.tb / 2 / r), r * Math.sin(phi + th + p.tb / 2 / r)]);
+      const dn = cam.map(([r, th]) => [r * Math.cos(phi + th - p.tb / 2 / r), r * Math.sin(phi + th - p.tb / 2 / r)]).reverse();
+      wg.add(extrudePoly(up.concat(dn), p.b2 - 1, zb, mWheel));
+    }
+    const back = new THREE.Mesh(new THREE.CylinderGeometry(g.R2, g.R2, p.backT, 72), mWheel); back.rotation.x = Math.PI / 2; back.position.z = zb - p.backT / 2; wg.add(back);
+    const ring = new THREE.Shape(); ring.absarc(0, 0, g.R2, 0, Math.PI * 2, false); const hole = new THREE.Path(); hole.absarc(0, 0, g.R1 - 3, 0, Math.PI * 2, true); ring.holes.push(hole);
+    const rg = new THREE.Mesh(new THREE.ExtrudeGeometry(ring, { depth: 1, bevelEnabled: false, curveSegments: 72 }), mWheel); rg.position.z = zf - 1; wg.add(rg);
+    const mot = new THREE.Mesh(new THREE.CylinderGeometry(p.motorD / 2, p.motorD / 2, p.motorL, 48), mMotor); mot.rotation.x = Math.PI / 2; mot.position.z = zb + p.motorL / 2; wg.add(mot);
+    const holder = new THREE.Group(); holder.position.set(right ? L - g.xc : g.xc, g.yc, 0); if (right) holder.scale.x = -1;
+    holder.add(wg); wg.userData.dir = 1; wheels.push(wg); model.add(holder);
+    const fl = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, zb - p.backT - tw, 24), mMotor); fl.rotation.x = Math.PI / 2; fl.position.set(right ? L - g.xc : g.xc, g.yc, tw + (zb - p.backT - tw) / 2); fl.name = 'motor_mount'; model.add(fl);
+  }
+  // flow arrows: inlet (into front) and outlet (up through slot)
+  flowGroup = new THREE.Group(); flowGroup.visible = showFlow; flowGroup.userData.noExport = true;
+  const aIn = new THREE.Color(css('--accent') || '#1f5fbf');
+  const mk = (color) => { const a = new THREE.Group(); const m = new THREE.MeshBasicMaterial({ color }); const sh = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 30, 8), m); sh.position.y = -15; const hd = new THREE.Mesh(new THREE.ConeGeometry(6, 14, 12), m); hd.position.y = 7; a.add(sh, hd); return a; };
+  for (const x of [g.xc, L - g.xc]) for (let k = 0; k < 3; k++) {
+    const a = mk(aIn); a.rotation.x = -Math.PI / 2; const ang = k * 2.1;
+    a.userData = { t: k / 3, place: (o, t) => o.position.set(x + 35 * Math.cos(ang), g.yc + 35 * Math.sin(ang), Dp + 110 - 110 * t) };
+    a.userData.place(a, a.userData.t); flowGroup.add(a);
+  }
+  for (let k = 0; k < 4; k++) {
+    const a = mk(new THREE.Color(css('--wheel') || '#d9732b')); const x = s.x0 + (s.x1 - s.x0) * (k + 0.5) / 4;
+    a.userData = { t: k / 4, place: (o, t) => o.position.set(x, H + 20 + 110 * t, Dp / 2) };
+    a.userData.place(a, a.userData.t); flowGroup.add(a);
+  }
+  model.add(flowGroup);
+  scene.add(model);
+}
+
+const tog = (id, fn) => { const b = document.getElementById(id); b.onclick = () => { const v = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', v); fn(v); }; };
+tog('vFront', v => { showFront = v; model && model.traverse(o => { if (o.name === 'front_plate') o.visible = v; }); });
+tog('vSpin', v => { spin = v; });
+tog('vFlow', v => { showFlow = v; if (flowGroup) flowGroup.visible = v; });
+document.getElementById('vReset').onclick = resetView;
+
+// ------------------------------------------------------------ export
+function collectMeshes() {
+  wheels.forEach(w => w.rotation.z = 0); model.updateMatrixWorld(true);
+  const out = [];
+  model.traverse(o => {
+    if (!o.isMesh) return;
+    let p = o, skip = false; while (p) { if (p.userData && p.userData.noExport) skip = true; p = p.parent; }
+    if (skip) return;
+    let name = 'part', q = o; while (q) { if (q.name) { name = q.name; break; } q = q.parent; }
+    out.push({ mesh: o, name });
+  });
+  return out;
+}
+// world-space triangle soup as Float32Array [ax,ay,az,bx,...]
+function triangles(o) {
+  const g = o.geometry, pos = g.attributes.position.array, idx = g.index ? g.index.array : null, e = o.matrixWorld.elements, flip = o.matrixWorld.determinant() < 0;
+  const n = idx ? idx.length : pos.length / 3, out = new Float32Array(n * 3);
+  for (let i = 0; i < n; i += 3) for (let k = 0; k < 3; k++) {
+    const src = idx ? idx[i + (flip && k ? 3 - k : k)] : i + (flip && k ? 3 - k : k);
+    const x = pos[3 * src], y = pos[3 * src + 1], z = pos[3 * src + 2], d = 3 * (i + k);
+    out[d] = e[0] * x + e[4] * y + e[8] * z + e[12]; out[d + 1] = e[1] * x + e[5] * y + e[9] * z + e[13]; out[d + 2] = e[2] * x + e[6] * y + e[10] * z + e[14];
+  }
+  return out;
+}
+function toSTL(parts) {
+  const soups = parts.map(p => triangles(p.mesh)); const nt = soups.reduce((a, s) => a + s.length / 9, 0);
+  const buf = new ArrayBuffer(84 + 50 * nt), dv = new DataView(buf);
+  const hdr = 'twin sirocco hood blower, mm'; for (let i = 0; i < hdr.length; i++) dv.setUint8(i, hdr.charCodeAt(i));
+  dv.setUint32(80, nt, true);
+  let off = 84;
+  for (const t of soups) for (let i = 0; i < t.length; i += 9) {
+    const ux = t[i + 3] - t[i], uy = t[i + 4] - t[i + 1], uz = t[i + 5] - t[i + 2], vx = t[i + 6] - t[i], vy = t[i + 7] - t[i + 1], vz = t[i + 8] - t[i + 2];
+    let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const l = Math.hypot(nx, ny, nz) || 1;
+    dv.setFloat32(off, nx / l, true); dv.setFloat32(off + 4, ny / l, true); dv.setFloat32(off + 8, nz / l, true); off += 12;
+    for (let k = 0; k < 9; k++) { dv.setFloat32(off, t[i + k], true); off += 4; }
+    off += 2;
+  }
+  return buf;
+}
+function toOBJ(parts) {
+  const chunks = ['# Twin sirocco hood blower, units mm, y up, inlets at +z\n'];
+  let base = 1; const groups = {};
+  parts.forEach(p => (groups[p.name] = groups[p.name] || []).push(p.mesh));
+  for (const [name, meshes] of Object.entries(groups)) {
+    chunks.push('o ' + name + '\n');
+    for (const m of meshes) {
+      const t = triangles(m), nv = t.length / 3; let v = '', f = '';
+      for (let i = 0; i < t.length; i += 3) v += 'v ' + t[i].toFixed(2) + ' ' + t[i + 1].toFixed(2) + ' ' + t[i + 2].toFixed(2) + '\n';
+      for (let i = 0; i < nv; i += 3) f += 'f ' + (base + i) + ' ' + (base + i + 1) + ' ' + (base + i + 2) + '\n';
+      chunks.push(v, f); base += nv;
+    }
+  }
+  return chunks.join('');
+}
+function curveCSV() {
+  const rows = ['rpm,Q_m3h,static_Pa,total_Pa,shaft_W,el_PSC_W,el_EC_W,eta_static,eta_total'];
+  for (const n of [750, 1000, 1250, 1500, P.rpm]) for (const r of F.curve(G, n, 30)) rows.push([n, r.Q.toFixed(1), r.dps.toFixed(1), r.dpt.toFixed(1), r.Pshaft.toFixed(2), r.PelPSC.toFixed(2), r.PelEC.toFixed(2), r.etaS.toFixed(3), r.etaT.toFixed(3)].join(','));
+  return rows.join('\n');
+}
+function dimSheet() {
+  const txt = t => t.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ');
+  const tab = id => [...document.querySelectorAll('#' + id + ' tr')].map(tr => [...tr.children].map(td => txt(td.innerHTML).trim()).join(': ')).join('\n');
+  return `TWIN SIROCCO HOOD BLOWER - dimension sheet\nOrigin bottom-left-back corner. x across, y up, z toward the front (inlets at z = ${P.Dp}). Units mm.\n\n${tab('dimA')}\n\n${tab('dimB')}\n\nScroll curve (left fan): r(theta) = ${G.r0.toFixed(3)} * exp(${G.k.toFixed(5)} * (theta - ${(G.th0).toFixed(5)})), theta from ${(G.th0).toFixed(5)} to 6.28319 rad, about centre (${G.xc.toFixed(2)}, ${G.yc.toFixed(2)}).\nThe outer wall continues vertically at x = ${(P.L / 2 - P.divT / 2).toFixed(2)} (divider face) from y = ${G.yc.toFixed(2)} to the top.\nRight fan: mirror about x = ${P.L / 2}.\n\nBlade camber (r mm, theta deg in rotation direction):\n${G.blade.map(([r, t]) => r.toFixed(3) + ', ' + (t / DEG).toFixed(3)).join('\n')}\n\nOperating point ${P.rpm} rpm, ${P.Qtarget} m3/h: static ${R.atT.dps.toFixed(0)} Pa, total ${R.atT.dpt.toFixed(0)} Pa, shaft ${R.atT.Pshaft.toFixed(1)} W, free-air flow ${R.qFree.toFixed(0)} m3/h.\n`;
+}
+let downloads = null;
+if (window.claude && window.claude.use) window.claude.use('downloads').then(d => { downloads = d; }).catch(() => {});
+document.getElementById('exportBtn').onclick = async () => {
+  const st = document.getElementById('exportStatus');
+  try {
+    st.textContent = 'Building export…'; paused = true;
+    const parts = collectMeshes();
+    const zip = new JSZip();
+    zip.file('twin_sirocco_blower.stl', toSTL(parts));
+    zip.file('twin_sirocco_blower.obj', toOBJ(parts));
+    zip.file('params.json', JSON.stringify({ params: P }, null, 1));
+    zip.file('fan_curves.csv', curveCSV());
+    zip.file('dimensions.txt', dimSheet());
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 3 } });
+    paused = false;
+    if (!downloads) { st.textContent = 'Saving files is not available in this view. Open the page on claude.ai to export.'; return; }
+    await downloads.save({ filename: `twin_sirocco_blower_${P.rpm}rpm.zip`, data: blob });
+    st.textContent = 'Export saved: STL + OBJ (mm), params.json, fan_curves.csv, dimensions.txt.';
+  } catch (e) {
+    paused = false;
+    st.textContent = e && e.code === 'declined' ? 'Export cancelled.' : 'Export failed: ' + (e && (e.message || e.code) || e);
+  }
+};
+
+// ------------------------------------------------------------ STEP export (OpenCascade in a worker)
+let cadWorker = null, cadBusy = false;
+function cadViaWorker(params, opts, progress) {
+  return new Promise((resolve, reject) => {
+    if (!cadWorker) {
+      try { cadWorker = new Worker(new URL('./cad.bundle.js', document.baseURI), { type: 'module' }); }
+      catch (e) { const err = new Error('worker unavailable'); err.noWorker = true; reject(err); return; }
+    }
+    cadWorker.onmessage = (e) => {
+      const d = e.data;
+      if (d.type === 'progress') progress(d.msg);
+      else if (d.type === 'done') resolve(d);
+      else reject(new Error(d.msg));
+    };
+    cadWorker.onerror = (e) => { cadWorker.terminate(); cadWorker = null; const err = new Error(e.message || 'worker failed to start'); err.noWorker = true; reject(err); };
+    cadWorker.postMessage({ params, opts });
+  });
+}
+function flowSimNote(names, opts) {
+  const w = (P.rpm * 2 * Math.PI / 60).toFixed(2);
+  return `TWIN SIROCCO HOOD BLOWER - CFD STEP (${P.rpm} rpm design file)
+Units mm. Axes as in SolidWorks: x across, y up, z toward the front (inlets face +z).
+Bodies: ${names.join(', ')}
+
+WHAT EACH BODY IS
+- Casing, Divider, Scroll_L/R, Inlet_Nozzle_L/R, Motor_Mount_L/R: stationary walls.
+- Impeller_L_CCW, Impeller_R_CW, Motor_Rotor_L/R: rotating walls. Each sits fully inside its rotating region.
+- RotatingRegion_L/R: cylinders around each wheel (with a nose if the motor sticks out). They touch no stationary body.
+- Lid_Inlet_L/R, Lid_Outlet: closing lids. Put boundary conditions on their INNER faces.
+- Fluid_L/R (only if exported): the air volume, for solvers that need it (Ansys, OpenFOAM, STAR). Delete or exclude them in Flow Simulation.
+
+SOLIDWORKS FLOW SIMULATION SETUP
+1. File > Open the .step. It arrives as an assembly of named parts (or import as a multibody part, both work).
+2. Wizard: Internal analysis, exclude cavities without flow conditions. Fluid: Air. Rotation: none at project level.
+3. Component Control: disable RotatingRegion_L and RotatingRegion_R${opts.fluid ? ', and disable or delete Fluid_L and Fluid_R' : ''}.
+4. Insert > Rotating Region:
+   - RotatingRegion_L: axis +Z through (${G.xc.toFixed(2)}, ${G.yc.toFixed(2)}), angular velocity +${w} rad/s (counter-clockwise seen from the front).
+   - RotatingRegion_R: axis +Z through (${(P.L - G.xc).toFixed(2)}, ${G.yc.toFixed(2)}), angular velocity -${w} rad/s (clockwise seen from the front).
+   Averaging (steady state) for fan curves; Sliding (transient) for tongue/noise studies.
+5. Boundary conditions:
+   - Free air (how hoods are rated): Environment Pressure 101325 Pa on the inner faces of Lid_Inlet_L, Lid_Inlet_R and Lid_Outlet.
+   - Fixed flow: Inlet Volume Flow ${(P.Qtarget / 2).toFixed(0)} m3/h on each inlet lid, Environment Pressure on the outlet lid; the pressure rise is the result.
+   - Fan curve: keep inlets at Environment Pressure and run a parametric study on the outlet static pressure (0 to ${Math.round(R.at1500.dps * 1.3)} Pa).
+6. Goals: volume flow rate and av. total pressure on the outlet lid face, av. total pressure on the inlet lid faces, torque (Z) on each impeller and motor rotor.
+   Shaft power per wheel = |torque| x ${w} rad/s.
+7. Mesh: local refinement inside each rotating region (blades are ${P.tb} mm thick, tongue gap ${P.tongueGap} mm) and at the tongue; small solid features and narrow channels resolution on.
+
+MODEL PREDICTION AT ${P.rpm} rpm (for comparison)
+Free-air flow ${R.qFree.toFixed(0)} m3/h. At ${P.Qtarget} m3/h: static ${R.atT.dps.toFixed(0)} Pa, total ${R.atT.dpt.toFixed(0)} Pa, shaft ${R.atT.Pshaft.toFixed(1)} W (both wheels).
+`;
+}
+document.getElementById('stepBtn').onclick = async () => {
+  if (cadBusy) return;
+  const st = document.getElementById('stepStatus'), btn = document.getElementById('stepBtn');
+  const opts = { rotating: document.getElementById('oRot').checked, lids: document.getElementById('oLids').checked, fluid: document.getElementById('oFluid').checked };
+  const params = Object.assign({}, P);
+  const progress = (m) => { st.textContent = m; };
+  cadBusy = true; btn.disabled = true; paused = true;
+  try {
+    if (!downloads) { st.textContent = 'Saving files is not available in this view. Open the page on claude.ai to export.'; return; }
+    progress('Starting…');
+    let res;
+    try { res = await cadViaWorker(params, opts, progress); }
+    catch (e) {
+      if (!e.noWorker) throw e;
+      progress('Background worker unavailable, building on the page (the page pauses while it works)…');
+      const m = await import(new URL('./cad.bundle.js', document.baseURI).href);
+      res = await m.run(params, opts, progress);
+    }
+    progress('Packing…');
+    const zip = new JSZip();
+    const base = `twin_sirocco_CFD_${P.rpm}rpm`;
+    zip.file(base + '.step', res.step);
+    zip.file('README_FlowSimulation.txt', flowSimNote(res.names, opts));
+    zip.file('params.json', JSON.stringify({ params }, null, 1));
+    zip.file('dimensions.txt', dimSheet());
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 3 } });
+    await downloads.save({ filename: base + '.zip', data: blob });
+    st.textContent = `Saved ${base}.zip: ${res.names.length} bodies, built in ${(res.ms / 1000).toFixed(1)} s.`;
+  } catch (e) {
+    st.textContent = e && e.code === 'declined' ? 'Export cancelled.' : 'STEP export failed: ' + (e && (e.message || e.code) || e);
+  } finally { cadBusy = false; btn.disabled = false; paused = false; }
+};
+
+window.addEventListener('resize', () => R && renderCharts());
+if (window.THREE && THREE.OrbitControls) init3D(); else viewer.innerHTML = '<p class="note" style="padding:16px">The 3D library did not load. The charts and numbers still work.</p>';
+recompute();
+})();
+</script>
+</body>
+</html>

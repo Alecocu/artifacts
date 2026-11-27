@@ -1,0 +1,1226 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phosphor Studio — ARTIFACTS</title>
+<meta name="description" content="A vector-display workbench: build a scene by hand — shapes, colour, motion, physics, sound and behaviour — then run it as an instrument, a toy or a motion graphic.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+<style>:root{--serif:'Space Grotesk',Georgia,serif;--sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;--bg:#050805;--fg:#b8f5c8;--hi:#39ff88;--mq-speed:90s;color-scheme:dark}
+html[data-theme=paper],.paper-panel{--bg:#0d140e;--fg:#c9f7d4;--hi:#39ff88;color-scheme:dark}</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%230c0c0b%22%2F%3E%3Cpath%20d%3D%22M9%2023%2016%208l7%2015%22%20stroke%3D%22%23efe9dd%22%20stroke-width%3D%223%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E">
+
+</head>
+<body class="">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><a class="brand" href="../../index.html">ARTIFACTS</a><nav class="topnav"><a href="../../index/index.html">[ Index <span class="count">12</span> ]</a><a href="../../about/index.html">[ About ]</a></nav></header>
+<main id="main" class="item">
+<section class="item-hero"><div class="item-text"><p class="label"><a href="../../index/index.html">← [ Index ]</a></p><h1>Phosphor Studio</h1><ul class="tags"><li>[ Tool ]</li><li><a href="../../p/phosphor/index.html">[ Phosphor ]</a></li><li>[ 20 Nov 2026 ]</li></ul><p class="lede">A vector-display workbench: build a scene by hand — shapes, colour, motion, physics, sound and behaviour — then run it as an instrument, a toy or a motion graphic.</p>
+<div class="actions"><a class="btn primary" href="app.html" target="_blank" rel="noopener">[ Open full screen ↗ ]</a><a class="btn" href="#guide">[ User guide ↓ ]</a><a class="btn" href="app.html" download="phosphor-studio.html">[ Download HTML ↓ ]</a></div>
+</div>
+<div class="item-obj"><a class="obj obj-page lg" href="app.html" style="--cover:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxYTFhMWEiLz48Y2lyY2xlIGN4PSIxMS41IiBjeT0iMTEuNSIgcj0iMy4yOSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjU3LjUiIGN5PSIxMS41IiByPSI0LjMyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTAzLjUiIGN5PSIxMS41IiByPSIzLjMxIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTI2LjUiIGN5PSIxMS41IiByPSIxLjIwIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTcyLjUiIGN5PSIxMS41IiByPSIzLjQzIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSIxMS41IiByPSI0LjMyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjY0LjUiIGN5PSIxMS41IiByPSIzLjE3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjg3LjUiIGN5PSIxMS41IiByPSIxLjM3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzMzLjUiIGN5PSIxMS41IiByPSIzLjU1IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzc5LjUiIGN5PSIxMS41IiByPSI0LjMwIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzQuNSIgY3k9IjM0LjUiIHI9IjQuMTQiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSI4MC41IiBjeT0iMzQuNSIgcj0iMi40MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjEwMy41IiBjeT0iMzQuNSIgcj0iMi4xOSIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE0OS41IiBjeT0iMzQuNSIgcj0iNC4wNCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjE5NS41IiBjeT0iMzQuNSIgcj0iNC4wNyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjI0MS41IiBjeT0iMzQuNSIgcj0iMi4yNiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI2NC41IiBjeT0iMzQuNSIgcj0iMi4zNiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjMxMC41IiBjeT0iMzQuNSIgcj0iNC4xMSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjM1Ni41IiBjeT0iMzQuNSIgcj0iMy45OSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjExLjUiIGN5PSI1Ny41IiByPSIzLjYwIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iNTcuNSIgY3k9IjU3LjUiIHI9IjEuNDQiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSI4MC41IiBjeT0iNTcuNSIgcj0iMy4xMSIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjEyNi41IiBjeT0iNTcuNSIgcj0iNC4zMSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjE3Mi41IiBjeT0iNTcuNSIgcj0iMy40OCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iNTcuNSIgcj0iMS4yNyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI0MS41IiBjeT0iNTcuNSIgcj0iMy4yNiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI4Ny41IiBjeT0iNTcuNSIgcj0iNC4zMiIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjMzMy41IiBjeT0iNTcuNSIgcj0iMy4zNSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjExLjUiIGN5PSI4MC41IiByPSIxLjgxIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iNTcuNSIgY3k9IjgwLjUiIHI9IjMuODMiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxMDMuNSIgY3k9IjgwLjUiIHI9IjQuMjEiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxNDkuNSIgY3k9IjgwLjUiIHI9IjIuNjMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxNzIuNSIgY3k9IjgwLjUiIHI9IjEuOTgiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjgwLjUiIHI9IjMuOTMiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyNjQuNSIgY3k9IjgwLjUiIHI9IjQuMTUiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzMTAuNSIgY3k9IjgwLjUiIHI9IjIuNDciIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzMzMuNSIgY3k9IjgwLjUiIHI9IjIuMTUiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzNzkuNSIgY3k9IjgwLjUiIHI9IjQuMDIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzNC41IiBjeT0iMTAzLjUiIHI9IjQuMjUiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSI4MC41IiBjeT0iMTAzLjUiIHI9IjMuNzQiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxMjYuNSIgY3k9IjEwMy41IiByPSIxLjY2IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTQ5LjUiIGN5PSIxMDMuNSIgcj0iMi45MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE5NS41IiBjeT0iMTAzLjUiIHI9IjQuMjgiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyNDEuNSIgY3k9IjEwMy41IiByPSIzLjYzIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjg3LjUiIGN5PSIxMDMuNSIgcj0iMS40OCIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjMxMC41IiBjeT0iMTAzLjUiIHI9IjMuMDgiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzNTYuNSIgY3k9IjEwMy41IiByPSI0LjMxIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTEuNSIgY3k9IjEyNi41IiByPSI0LjI5IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iNTcuNSIgY3k9IjEyNi41IiByPSIyLjk5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iODAuNSIgY3k9IjEyNi41IiByPSIxLjU5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTI2LjUiIGN5PSIxMjYuNSIgcj0iMy43MCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjE3Mi41IiBjeT0iMTI2LjUiIHI9IjQuMjYiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjEyNi41IiByPSIyLjgzIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjQxLjUiIGN5PSIxMjYuNSIgcj0iMS43NiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI4Ny41IiBjeT0iMTI2LjUiIHI9IjMuODEiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzMzMuNSIgY3k9IjEyNi41IiByPSI0LjIyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzc5LjUiIGN5PSIxMjYuNSIgcj0iMi42OCIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjM0LjUiIGN5PSIxNDkuNSIgcj0iMi4wNSIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjU3LjUiIGN5PSIxNDkuNSIgcj0iMi41NyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjEwMy41IiBjeT0iMTQ5LjUiIHI9IjQuMTkiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxNDkuNSIgY3k9IjE0OS41IiByPSIzLjg3IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTk1LjUiIGN5PSIxNDkuNSIgcj0iMS44NyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMTQ5LjUiIHI9IjIuNzMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIyNjQuNSIgY3k9IjE0OS41IiByPSI0LjI0IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzEwLjUiIGN5PSIxNDkuNSIgcj0iMy43NyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjM1Ni41IiBjeT0iMTQ5LjUiIHI9IjEuNzAiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzNzkuNSIgY3k9IjE0OS41IiByPSIyLjg5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzQuNSIgY3k9IjE3Mi41IiByPSIzLjQzIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iODAuNSIgY3k9IjE3Mi41IiByPSI0LjMyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTI2LjUiIGN5PSIxNzIuNSIgcj0iMy4xNyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE0OS41IiBjeT0iMTcyLjUiIHI9IjEuMzciIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxOTUuNSIgY3k9IjE3Mi41IiByPSIzLjU1IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjQxLjUiIGN5PSIxNzIuNSIgcj0iNC4zMCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjI4Ny41IiBjeT0iMTcyLjUiIHI9IjMuMDMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzMTAuNSIgY3k9IjE3Mi41IiByPSIxLjU0IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzU2LjUiIGN5PSIxNzIuNSIgcj0iMy42NyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjExLjUiIGN5PSIxOTUuNSIgcj0iNC4wNCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjU3LjUiIGN5PSIxOTUuNSIgcj0iNC4wNyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjEwMy41IiBjeT0iMTk1LjUiIHI9IjIuMjYiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxMjYuNSIgY3k9IjE5NS41IiByPSIyLjM2IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTcyLjUiIGN5PSIxOTUuNSIgcj0iNC4xMSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMTk1LjUiIHI9IjMuOTkiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyNjQuNSIgY3k9IjE5NS41IiByPSIyLjA5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjg3LjUiIGN5PSIxOTUuNSIgcj0iMi41MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjMzMy41IiBjeT0iMTk1LjUiIHI9IjQuMTciIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzNzkuNSIgY3k9IjE5NS41IiByPSIzLjkwIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzQuNSIgY3k9IjIxOC41IiByPSIzLjQ4IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iODAuNSIgY3k9IjIxOC41IiByPSIxLjI3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTAzLjUiIGN5PSIyMTguNSIgcj0iMy4yNiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE0OS41IiBjeT0iMjE4LjUiIHI9IjQuMzIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxOTUuNSIgY3k9IjIxOC41IiByPSIzLjM1IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjY0LjUiIGN5PSIyMTguNSIgcj0iMy4zOSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjMxMC41IiBjeT0iMjE4LjUiIHI9IjQuMzIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzNTYuNSIgY3k9IjIxOC41IiByPSIzLjIxIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzc5LjUiIGN5PSIyMTguNSIgcj0iMS4zMyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjExLjUiIGN5PSIyNDEuNSIgcj0iMi42MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjM0LjUiIGN5PSIyNDEuNSIgcj0iMS45OCIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjgwLjUiIGN5PSIyNDEuNSIgcj0iMy45MyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjEyNi41IiBjeT0iMjQxLjUiIHI9IjQuMTUiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxNzIuNSIgY3k9IjI0MS41IiByPSIyLjQ3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTk1LjUiIGN5PSIyNDEuNSIgcj0iMi4xNSIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI0MS41IiBjeT0iMjQxLjUiIHI9IjQuMDIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyODcuNSIgY3k9IjI0MS41IiByPSI0LjA5IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzMzLjUiIGN5PSIyNDEuNSIgcj0iMi4zMCIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjM1Ni41IiBjeT0iMjQxLjUiIHI9IjIuMzIiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxMS41IiBjeT0iMjY0LjUiIHI9IjIuOTMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSI1Ny41IiBjeT0iMjY0LjUiIHI9IjQuMjgiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxMDMuNSIgY3k9IjI2NC41IiByPSIzLjYzIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTQ5LjUiIGN5PSIyNjQuNSIgcj0iMS40OCIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE3Mi41IiBjeT0iMjY0LjUiIHI9IjMuMDgiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjI2NC41IiByPSI0LjMxIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjY0LjUiIGN5PSIyNjQuNSIgcj0iMy41MSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjMxMC41IiBjeT0iMjY0LjUiIHI9IjEuMzEiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzMzMuNSIgY3k9IjI2NC41IiByPSIzLjIyIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzc5LjUiIGN5PSIyNjQuNSIgcj0iNC4zMiIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjM0LjUiIGN5PSIyODcuNSIgcj0iNC4yNiIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjgwLjUiIGN5PSIyODcuNSIgcj0iMi44MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjEwMy41IiBjeT0iMjg3LjUiIHI9IjEuNzYiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxNDkuNSIgY3k9IjI4Ny41IiByPSIzLjgxIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTk1LjUiIGN5PSIyODcuNSIgcj0iNC4yMiIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjI0MS41IiBjeT0iMjg3LjUiIHI9IjIuNjgiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIyNjQuNSIgY3k9IjI4Ny41IiByPSIxLjkzIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzEwLjUiIGN5PSIyODcuNSIgcj0iMy45MSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjM1Ni41IiBjeT0iMjg3LjUiIHI9IjQuMTciIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxMS41IiBjeT0iMzEwLjUiIHI9IjMuODciIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSI1Ny41IiBjeT0iMzEwLjUiIHI9IjEuODciIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSI4MC41IiBjeT0iMzEwLjUiIHI9IjIuNzMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxMjYuNSIgY3k9IjMxMC41IiByPSI0LjI0IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTcyLjUiIGN5PSIzMTAuNSIgcj0iMy43NyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMzEwLjUiIHI9IjEuNzAiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIyNDEuNSIgY3k9IjMxMC41IiByPSIyLjg5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjg3LjUiIGN5PSIzMTAuNSIgcj0iNC4yNyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjMzMy41IiBjeT0iMzEwLjUiIHI9IjMuNjYiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzNzkuNSIgY3k9IjMxMC41IiByPSIxLjUzIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTEuNSIgY3k9IjMzMy41IiByPSIxLjM3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iNTcuNSIgY3k9IjMzMy41IiByPSIzLjU1IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTAzLjUiIGN5PSIzMzMuNSIgcj0iNC4zMCIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjE0OS41IiBjeT0iMzMzLjUiIHI9IjMuMDMiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIxNzIuNSIgY3k9IjMzMy41IiByPSIxLjU0IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSIzMzMuNSIgcj0iMy42NyIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjI2NC41IiBjeT0iMzMzLjUiIHI9IjQuMjciIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzMTAuNSIgY3k9IjMzMy41IiByPSIyLjg3IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMzMzLjUiIGN5PSIzMzMuNSIgcj0iMS43MiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjM3OS41IiBjeT0iMzMzLjUiIHI9IjMuNzgiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzNC41IiBjeT0iMzU2LjUiIHI9IjQuMTEiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSI4MC41IiBjeT0iMzU2LjUiIHI9IjMuOTkiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIxMjYuNSIgY3k9IjM1Ni41IiByPSIyLjA5IiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMTQ5LjUiIGN5PSIzNTYuNSIgcj0iMi41MyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjE5NS41IiBjeT0iMzU2LjUiIHI9IjQuMTciIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyNDEuNSIgY3k9IjM1Ni41IiByPSIzLjkwIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMjg3LjUiIGN5PSIzNTYuNSIgcj0iMS45MiIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjMxMC41IiBjeT0iMzU2LjUiIHI9IjIuNjkiIGZpbGw9IiNmZjAwZWEiLz48Y2lyY2xlIGN4PSIzNTYuNSIgY3k9IjM1Ni41IiByPSI0LjIyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTEuNSIgY3k9IjM3OS41IiByPSI0LjMyIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iNTcuNSIgY3k9IjM3OS41IiByPSIzLjM1IiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMTI2LjUiIGN5PSIzNzkuNSIgcj0iMy4zOSIgZmlsbD0iI2YxZWRlNCIvPjxjaXJjbGUgY3g9IjE3Mi41IiBjeT0iMzc5LjUiIHI9IjQuMzIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjM3OS41IiByPSIzLjIxIiBmaWxsPSIjZmYwMGVhIi8+PGNpcmNsZSBjeD0iMjQxLjUiIGN5PSIzNzkuNSIgcj0iMS4zMyIgZmlsbD0iI2ZmMDBlYSIvPjxjaXJjbGUgY3g9IjI4Ny41IiBjeT0iMzc5LjUiIHI9IjMuNTIiIGZpbGw9IiNmMWVkZTQiLz48Y2lyY2xlIGN4PSIzMzMuNSIgY3k9IjM3OS41IiByPSI0LjMwIiBmaWxsPSIjZjFlZGU0Ii8+PGNpcmNsZSBjeD0iMzc5LjUiIGN5PSIzNzkuNSIgcj0iMy4wNiIgZmlsbD0iI2ZmMDBlYSIvPjwvc3ZnPg==');--ink:#1a1a1a;--accent:#ff00ea;--paper:#f1ede4" aria-label="Phosphor Studio">
+  <span class="obj-body"><span class="obj-front"><span class="obj-label"><span class="obj-kind">Tool</span><span class="obj-title">Phosphor Studio</span></span></span><span class="obj-spine"><span>Phosphor Studio</span></span><span class="obj-edge"></span><span class="obj-top"></span></span></a></div></section>
+<section class="stage"><div class="stage-bar"><span class="label">[ Live ]</span><span>Runs right here. Sound starts when you press play inside it.</span><a href="app.html" target="_blank" rel="noopener">[ Full screen ↗ ]</a></div>
+<iframe src="app.html" title="Phosphor Studio" loading="lazy" allow="autoplay; fullscreen; clipboard-write"></iframe></section>
+<section class="guide paper-panel" id="guide" aria-labelledby="guide-title"><header class="doc-head"><p class="label">[ User guide · 39 min read · 20 Nov 2026 ]</p><h2 id="guide-title">How to use Phosphor Studio</h2><p class="lede">How Phosphor Studio works: the screen, objects, physics, signals, the mod matrix, triggers and expressions.</p></header>
+<div class="doc-grid"><nav class="toc" aria-label="Guide contents"><p class="label">[ Contents ]</p><ol><li><a href="#what-phosphor-studio-is">What Phosphor Studio is</a></li><li><a href="#a-tour-of-the-screen">A tour of the screen</a></li><li><a href="#core-tools-and-modules">Core tools and modules</a></li><li><a href="#quick-start-a-bouncing-glowing-first-scene">Quick start: a bouncing, glowing first scene</a></li><li><a href="#viewport-camera-and-tools">Viewport, camera and tools</a></li><li><a href="#objects">Objects</a></li><li><a href="#transform-motion-and-look">Transform, motion and look</a></li><li><a href="#physics">Physics</a></li><li><a href="#signals">Signals</a></li><li><a href="#mod-matrix">Mod matrix</a></li><li><a href="#triggers">Triggers</a></li><li><a href="#expressions">Expressions</a></li><li><a href="#running-live-editing-templates-and-spawning">Running, live editing, templates and spawning</a></li><li><a href="#module-guides">Module guides</a></li><li><a href="#saving-and-exporting">Saving and exporting</a></li><li><a href="#recipes">Recipes</a></li><li><a href="#troubleshooting-and-limits">Troubleshooting and limits</a></li></ol></nav><article class="prose"><h2 id="what-phosphor-studio-is">What Phosphor Studio is</h2>
+<p>Phosphor Studio is a vector-display workbench where you build a scene by hand and then run it: shapes, colours, motion, physics, sound and behaviour are all set with controls you can see, not described to an AI. The same scene can become an instrument, a data visualization, a toy or a motion graphic.</p>
+<p>Everything works in two states:</p>
+<ul>
+<li><strong>Edit</strong> — the scene stands still exactly as you built it. You add, move and configure objects.</li>
+<li><strong>Run</strong> — press Play and the scene comes alive: physics simulates, signals oscillate, triggers fire, the sequencer plays. Press Stop and everything snaps back to the edit state, so experiments never damage your build.</li>
+</ul>
+<p>Three ideas carry the whole tool:</p>
+<ol>
+<li><strong>Objects</strong> are what you see — a shape plus its look, an optional physics body, triggers and a script.</li>
+<li><strong>Signals</strong> are numbers that change over time — an LFO, an envelope, the mouse, the audio level, a MIDI knob, a data column.</li>
+<li><strong>Connections</strong> turn signals and events into change — the <strong>Mod matrix</strong> continuously drives any numeric property from a signal, and <strong>Triggers</strong> react to events (a collision, a click, a beat) with an action (play a note, push, flash, spawn).</li>
+</ol>
+<p>The guide follows the order you will meet things: a tour of the screen, the module switches, a quick start, then each system in depth, the optional modules, saving, recipes and troubleshooting.</p>
+<h2 id="a-tour-of-the-screen">A tour of the screen</h2>
+<p>The screen has five regions: you build on the left, watch in the centre and tune on the right, with the header above and the rack of tabs below.</p>
+<figure class="missing"><span class="label">[ Diagram not included ]</span><figcaption>screen layout · five regions</figcaption><p>This interactive drawing lived inside Claude Docs and could not be exported. The text around it describes what it showed.</p></figure>
+
+
+
+<figure class="shot"><img src="media/01.png" alt="Phosphor Studio with the Bounce Machine template loaded and Pad 3 selected" loading="lazy"></figure>
+
+
+<p><em>The real screen: Bounce Machine loaded, Pad 3 selected (green in the Scene list, Move gizmo in the viewport, its settings in the Inspector), the Signals tab open below.</em></p>
+<ul>
+<li><strong>Header</strong> — transport (Play / Stop / Step), editing tools, camera views, undo and redo, the project name, and the Project, PNG, Rec, Modules and Help buttons. FPS, time and body count sit at the right on wide screens.</li>
+<li><strong>Add palette</strong> — one button per object type; it places the object at the camera target and selects it.</li>
+<li><strong>Scene list</strong> — every object with its colour, type icon and badges.</li>
+<li><strong>Viewport</strong> — the CRT. Click to select, drag to move or orbit, and watch the scene run.</li>
+<li><strong>Inspector</strong> — every setting of the selected object in folding sections; with nothing selected it shows a short orientation.</li>
+<li><strong>Rack</strong> — project-wide panels as tabs. Drag the thin bar at its top edge to resize it. A purple number on a tab counts its items; a red one on Console counts errors.</li>
+</ul>
+<p>On a narrow window (under about 860 px) the regions stack: viewport first, then palette and list, inspector, rack.</p>
+<h2 id="core-tools-and-modules">Core tools and modules</h2>
+<p>A new project shows only the core tools; everything else is a module you switch on from the <strong>Modules</strong> button in the header. Turning a module off only hides its controls — nothing in the project is deleted and the engine keeps running it. Loading a template or a saved project switches on every module that project already uses.</p>
+<figure class="shot"><img src="media/02.png" alt="The Modules window with seven module cards" loading="lazy"></figure>
+
+
+<p><em>Header → Modules. Click a card to toggle it; a filled square means on.</em></p>
+<p><strong>Always visible (core):</strong> the Add palette (box, sphere, geodesic, cylinder, cone, torus, plane, polygon, star, ring, curve, path, text, scope, empty), the Scene list, the Inspector sections Object, Transform, Shape, Look, Physics, Triggers and Modulation, and the rack tabs Signals, Mod matrix, World and Console.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th>What it adds</th>
+<th>Turn it on when you want to…</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sound</td>
+<td>Sequencer and Instruments tabs, the Spectrum object, the Play note and Set tempo actions, the Sequencer step / track trigger events</td>
+<td>make anything audible, build an instrument, sync visuals to a groove</td>
+</tr>
+<tr>
+<td>Live inputs</td>
+<td>I/O tab (MIDI, computer-keyboard notes, microphone, audio file), Note and CC trigger events</td>
+<td>play the scene from a controller, react to sound from outside</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Data tab: paste or load CSV/JSON, row cursor, chart generators</td>
+<td>turn a dataset into a visual or a sound</td>
+</tr>
+<tr>
+<td>Particles &amp; fields</td>
+<td>Emitter and Attractor objects, the Emit particles action</td>
+<td>sparks, fountains, swarms, force fields</td>
+</tr>
+<tr>
+<td>Joints</td>
+<td>Joints section in the inspector (ball, hinge, distance, spring, lock)</td>
+<td>pendulums, chains, ragdolls, springy links</td>
+</tr>
+<tr>
+<td>Scripting</td>
+<td>Script section per object, Scene script tab, console command line, Run code action</td>
+<td>logic the visual controls cannot express</td>
+</tr>
+<tr>
+<td>Assist</td>
+<td>Assist tab: describe additions in words, Claude drafts editable objects</td>
+<td>rough out a scene quickly, then refine by hand</td>
+</tr>
+</tbody></table></div>
+<p><strong>All on</strong> and <strong>Core only</strong> in the Modules window switch everything at once. The choice is saved with each project.</p>
+<h2 id="quick-start-a-bouncing-glowing-first-scene">Quick start: a bouncing, glowing first scene</h2>
+<p>In about five minutes you build a ball that falls on a tilted slab, flashes on impact and is lit by a slowly pulsing hue — touching objects, physics, triggers, signals and the mod matrix once each.</p>
+<ol>
+<li><strong>Start clean.</strong> Project → <strong>Blank</strong>. You get a floor grid, one LFO called <code>lfo1</code> and the core tools.</li>
+<li><strong>Add a slab.</strong> Click <strong>Box</strong> in the Add palette. In the Inspector set Shape width 3, height 0.2, depth 2; Transform position Y 1, rotation Z 15.</li>
+<li><strong>Make it solid.</strong> Physics → Body <strong>Static</strong>, Bounce 0.8. Look → Style <strong>Solid (hidden line)</strong>, Stroke a colour you like.</li>
+<li><strong>Add a ball.</strong> Click <strong>Sphere</strong>. Position Y 5, X −0.8. Physics → <strong>Dynamic</strong>, Bounce 0.7.</li>
+<li><strong>Run it.</strong> Press <strong>Play</strong> (or Space). The ball falls, bounces off the slab and rolls away. Press <strong>Stop</strong> — it is back at Y 5.</li>
+<li><strong>Make the slab react.</strong> Select the box → Triggers → <strong>Hit → flash</strong>. Play again: the slab flashes white each time it is struck.</li>
+<li><strong>Animate a property.</strong> On the box, press the <strong>~</strong> button next to Hue shift. The Mod matrix opens with a new route <code>lfo1 → Box · Hue shift</code>, amount 90. Play: the slab&#39;s colour sweeps ±90° every two seconds.</li>
+<li><strong>Throw things.</strong> While running the tool switches to <strong>Hand</strong>: drag the ball with the mouse and let go to throw it.</li>
+<li><strong>Keep it.</strong> Rename the project in the header field, then Project → <strong>Save here</strong> or <strong>Export .json</strong>.</li>
+</ol>
+<figure class="shot"><img src="media/03.png" alt="The quick-start scene running: a ball falling toward a tilted slab, with the slab&#39;s trigger and the lfo1 route visible" loading="lazy"></figure>
+
+
+<p><em>The finished quick start a moment before impact: the ball leaves a phosphor trail, the Inspector shows the slab&#39;s Collision → Flash trigger, and the Mod matrix shows the <code>lfo1 → Box · Hue shift</code> route with its live In and Out meters.</em></p>
+<p>From here, turn on the <strong>Sound</strong> module and change the trigger&#39;s action to <strong>Play note</strong> to hear the impacts — the recipes section builds this into an instrument.</p>
+<h2 id="viewport-camera-and-tools">Viewport, camera and tools</h2>
+<p>The viewport is the CRT screen in the middle; the camera orbits a target point and every tool works directly on it.</p>
+<p><strong>Camera</strong></p>
+<ul>
+<li>Left-drag on empty space (or Alt + drag anywhere) orbits.</li>
+<li>Right-drag, middle-drag or Shift + drag pans the target.</li>
+<li>The mouse wheel zooms (moves the camera closer or further).</li>
+<li>Double-click an object, or select it and press <strong>F</strong>, to frame it.</li>
+<li><strong>Persp / Top / Front / Side</strong> (keys 1–4) jump to fixed views; <strong>Persp</strong> returns to where you were. <strong>Ortho</strong> (key 5) removes perspective — Front + Ortho is a flat 2D drawing board.</li>
+<li>Field of view, distance and target are also numeric in World → Camera.</li>
+</ul>
+<p><strong>Tools</strong> (header, or keys)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Key</th>
+<th>What a drag does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Move</td>
+<td>W</td>
+<td>Drag an object to slide it in the plane facing you; drag an axis arrow (red X, green Y, blue Z) to move along that axis only.</td>
+</tr>
+<tr>
+<td>Rotate</td>
+<td>E</td>
+<td>Drag an axis handle to turn about that local axis; drag the object to turn it freely.</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>R</td>
+<td>Drag an axis handle to stretch that axis; drag the object to scale uniformly.</td>
+</tr>
+<tr>
+<td>Pen</td>
+<td>P</td>
+<td>Draw a stroke on the plane through the camera target; on release it becomes a Path object (closed if you end near the start).</td>
+</tr>
+<tr>
+<td>Hand</td>
+<td>H</td>
+<td>While running: click an object to fire its Click triggers, drag a dynamic body to grab and throw it. While stopped: select.</td>
+</tr>
+<tr>
+<td>Snap</td>
+<td>—</td>
+<td>Toggle: moves snap to 0.25 units, rotations to 15°, scales to 0.1.</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/04.png" alt="The Move, Rotate and Scale gizmos on the same pad" loading="lazy"></figure>
+
+
+<p><em>The gizmo for each tool on the same pad. Grab a handle to work on one axis (red X, green Y, blue Z); grab the object itself for free movement.</em></p>
+<p>Play switches to Hand automatically and Stop switches back, unless you picked a tool yourself. Clicking empty space deselects. A <strong>Locked</strong> object cannot be dragged.</p>
+<p><strong>Shortcuts</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Space</td>
+<td>Play / pause (while running, only if no trigger listens for the space key)</td>
+</tr>
+<tr>
+<td>Esc</td>
+<td>Deselect; while running, stop</td>
+</tr>
+<tr>
+<td>Ctrl Z / Ctrl Shift Z (or Ctrl Y)</td>
+<td>Undo / redo</td>
+</tr>
+<tr>
+<td>Ctrl D</td>
+<td>Duplicate selection</td>
+</tr>
+<tr>
+<td>Delete / Backspace</td>
+<td>Delete selection</td>
+</tr>
+<tr>
+<td>Ctrl S</td>
+<td>Save the project in this browser</td>
+</tr>
+<tr>
+<td>F, 1–5, W E R H P</td>
+<td>Frame, views, tools (edit state only)</td>
+</tr>
+<tr>
+<td>?</td>
+<td>Help</td>
+</tr>
+</tbody></table></div>
+<p>While running, letter keys go to the scene (Key triggers, keyboard notes) instead of acting as shortcuts.</p>
+<p><strong>Heads-up display</strong> — top left shows state, object and particle counts and the sequencer step; top right the view, BPM and frame rate; bottom left a hint for the current tool; bottom right the recording timer.</p>
+<h2 id="objects">Objects</h2>
+<p>Every object is one of 18 types; clicking a type in the Add palette places it at the camera target and selects it. The type decides the Shape parameters; everything else (transform, look, physics, triggers) is shared. Units are scene units — the floor grid has 1-unit squares and Y points up.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Shape parameters</th>
+<th>Good for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Box</td>
+<td>width, height, depth, divisions (adds grid lines on each face)</td>
+<td>slabs, pads, walls, bars, cages</td>
+</tr>
+<tr>
+<td>Sphere</td>
+<td>radius, rings, segments</td>
+<td>balls, planets, bobs</td>
+</tr>
+<tr>
+<td>Geodesic</td>
+<td>radius, subdivide 0–3</td>
+<td>low-poly spheres, domes, cores</td>
+</tr>
+<tr>
+<td>Cylinder</td>
+<td>top radius, bottom radius, height, segments</td>
+<td>posts, drums, pipes</td>
+</tr>
+<tr>
+<td>Cone</td>
+<td>a cylinder with top radius 0</td>
+<td>markers, nozzles, spikes</td>
+</tr>
+<tr>
+<td>Torus</td>
+<td>ring radius R, tube radius r, segments, tube segments</td>
+<td>halos, rings, wheels</td>
+</tr>
+<tr>
+<td>Plane</td>
+<td>width, depth, divisions (lies flat on X–Z)</td>
+<td>grounds, grids, ramps, screens</td>
+</tr>
+<tr>
+<td>Polygon</td>
+<td>sides, radius, star inner ratio (1 = regular), extrude depth (0 = flat)</td>
+<td>hexagons, badges, prisms</td>
+</tr>
+<tr>
+<td>Star</td>
+<td>a polygon with 5 sides and inner ratio 0.45</td>
+<td>stars, sparkles</td>
+</tr>
+<tr>
+<td>Ring</td>
+<td>radius, segments, arc °, ticks, tick length (in X–Y)</td>
+<td>dials, gauges, orbits, clock faces</td>
+</tr>
+<tr>
+<td>Curve</td>
+<td>preset, x(u,t), y(u,t), z(u,t), samples, closed</td>
+<td>Lissajous figures, helices, knots, waves, any formula</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>closed, smooth (0–4), point list</td>
+<td>hand-drawn strokes, data lines, outlines</td>
+</tr>
+<tr>
+<td>Text</td>
+<td>text with {expressions}, size, align, font (display / mono)</td>
+<td>titles, labels, live readouts</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>signal name, seconds of history, width, height, gain, mode (line / dots / bars)</td>
+<td>plotting any signal over time</td>
+</tr>
+<tr>
+<td>Empty</td>
+<td>size</td>
+<td>invisible logic carriers, spawners, pivots</td>
+</tr>
+<tr>
+<td>Spectrum (Sound)</td>
+<td>source out / in, bins, width, height, mode (bars / line / radial / wave)</td>
+<td>audio-reactive analyzers</td>
+</tr>
+<tr>
+<td>Emitter (Particles)</td>
+<td>rate, speed, spread, life, gravity ×, drag, size, bounce, max, streak</td>
+<td>fountains, sparks, smoke</td>
+</tr>
+<tr>
+<td>Attractor (Particles)</td>
+<td>strength (negative repels), radius, softening, affect bodies / particles</td>
+<td>wells, vortices, magnets</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/05.png" alt="All 18 object types drawn in the viewport, each labelled" loading="lazy"></figure>
+
+
+<p><em>Every object type as it draws on the screen, running (so the scope, spectrum and emitter are live). Labels marked Sound or Particles need that module.</em></p>
+<p><strong>Curves.</strong> <code>u</code> runs 0→1 along the curve, <code>t</code> is time while running, <code>i</code> and <code>n</code> are the sample index and count. Picking a preset fills x/y/z; editing any formula switches the preset to <em>custom</em>. Example: <code>x = sin(u*TAU*3 + t)*1.6</code>, <code>y = sin(u*TAU*2)*1.6</code>, <code>z = 0</code> draws a moving 3:2 Lissajous.</p>
+<p><strong>Paths.</strong> Draw them with the Pen tool, or type points one per line as <code>x, y, z</code>. Smooth 1–4 rounds the corners by repeated corner cutting.</p>
+<p><strong>Text.</strong> Anything in braces is evaluated every frame: <code>STEP {step+1}</code> · <code>{S(&quot;lfo1&quot;).toFixed(2)}</code> · <code>{D(&quot;month&quot;)}</code> · <code>{t.toFixed(1)}s</code>. Text always faces the camera.</p>
+<p><strong>Object flags</strong> (Inspector → top section): <strong>Visible</strong> hides it in both states; <strong>Template</strong> keeps it out of the running scene so it only appears when a Spawn action creates a copy (shown dimmed in edit); <strong>Locked</strong> stops accidental dragging. <strong>Duplicate</strong>, <strong>Frame</strong>, <strong>Drop to floor</strong> (rests the bottom on the floor) and <strong>Delete</strong> sit underneath.</p>
+<p>The Scene list shows each object&#39;s icon in its colour and badges: D/S/K for a dynamic, static or kinematic body, ⚡n for triggers, {} for a script, ~ when something modulates it. Click selects, double-click frames, the dot toggles visibility, the filter box searches by name or type.</p>
+<h2 id="transform-motion-and-look">Transform, motion and look</h2>
+<p>Position, rotation and scale place an object; Spin and Drift move it on their own while running; the Look section decides how its lines are drawn.</p>
+<p><strong>Transform.</strong> Position X/Y/Z in units, Rotation in degrees (applied X, then Y, then Z), Scale per axis. Every number field can be typed, nudged with the arrows, or scrubbed: drag the field&#39;s label left or right (hold Shift for 10× steps). Edits while running move the live object too.</p>
+<p><strong>Motion.</strong> <em>Spin °/s</em> adds a constant rotation rate per axis and <em>Drift u/s</em> a constant velocity. They act on any object that is not a dynamic physics body, including static and kinematic bodies, and reset on Stop.</p>
+<p><strong>Look.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stroke</td>
+<td>Line colour.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><strong>Wire</strong> draws every edge. <strong>Solid</strong> fills the faces with the Fill colour and hides back edges (a hidden-line drawing). <strong>X-ray</strong> draws front edges bright and back edges faint. <strong>Points</strong> draws only vertices. <strong>Dashed</strong> draws dashed edges.</td>
+</tr>
+<tr>
+<td>Width</td>
+<td>Line thickness in pixels.</td>
+</tr>
+<tr>
+<td>Glow</td>
+<td>Bloom strength multiplier (needs the tube on).</td>
+</tr>
+<tr>
+<td>Opacity</td>
+<td>0–1.</td>
+</tr>
+<tr>
+<td>Hue shift</td>
+<td>Rotates the stroke colour around the colour wheel, in degrees — the easiest property to animate.</td>
+</tr>
+<tr>
+<td>Dash</td>
+<td>Dash length; above 0 it dashes any style.</td>
+</tr>
+<tr>
+<td>Fill, Fill opacity</td>
+<td>Solid style only: face colour and how much it hides what is behind.</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/06.png" alt="The same sphere drawn in Wire, Solid, X-ray, Points and Dashed styles" loading="lazy"></figure>
+
+
+<p><em>One sphere, five styles. Solid hides the back half; X-ray keeps it faint.</em></p>
+<p>Lines add up like light: overlapping strokes get brighter, as on a real vector monitor (with Persistence above 0 they combine by the brightest instead, so trails never burn out to white). A <strong>Flash</strong> (from a trigger) briefly pushes the stroke towards white, widens it and boosts glow.</p>
+<p><strong>The tube (World tab → Tube).</strong> These settings apply to the whole screen and to PNG and video exports.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CRT on</td>
+<td>Master switch for all tube effects.</td>
+</tr>
+<tr>
+<td>Scanlines</td>
+<td>Strength of the horizontal line pattern.</td>
+</tr>
+<tr>
+<td>Bloom</td>
+<td>Global glow strength.</td>
+</tr>
+<tr>
+<td>Noise</td>
+<td>Animated grain.</td>
+</tr>
+<tr>
+<td>Vignette</td>
+<td>Darkened corners.</td>
+</tr>
+<tr>
+<td>Flicker</td>
+<td>Occasional brightness dips.</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>0–0.97: how long moving lines leave phosphor trails while running. 0.3 is subtle, 0.75 paints streaks.</td>
+</tr>
+<tr>
+<td>Background, Grid colour, Floor grid</td>
+<td>Screen colour and the reference grid.</td>
+</tr>
+<tr>
+<td>Glow quality</td>
+<td>Auto switches from soft blur to a cheaper halo when the frame rate stays under about 32 fps; Soft blur or Fast halo force one.</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/07.png" alt="Lissajous Synth with the CRT off, the CRT on, and persistence at 0.75" loading="lazy"></figure>
+
+
+<p><em>The Lissajous Synth template three ways: tube off, tube on with default settings, and Persistence 0.75.</em></p>
+<h2 id="physics">Physics</h2>
+<p>Give an object a body in Inspector → Physics and it takes part in a full 3D rigid-body simulation (cannon.js) while running; bodies are rebuilt from your settings every time you press Play.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Moves how</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>None (visual)</td>
+<td>Only by transform, motion, mods and scripts; nothing collides with it</td>
+<td>decoration, text, logic</td>
+</tr>
+<tr>
+<td>Static</td>
+<td>Never pushed by collisions; mods and motion can still move it</td>
+<td>floors, walls, pads, obstacles</td>
+</tr>
+<tr>
+<td>Dynamic</td>
+<td>Owned by the simulation: gravity, collisions, impulses</td>
+<td>balls, debris, anything that falls or gets thrown</td>
+</tr>
+<tr>
+<td>Kinematic</td>
+<td>Follows its transform, mods and scripts exactly and shoves dynamic bodies out of the way with real velocity</td>
+<td>paddles, pistons, mouse-driven pushers, moving platforms</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/08.png" alt="Bounce Machine running, with the kinematic Paddle selected and its Physics section open" loading="lazy"></figure>
+
+
+<p><em>Bounce Machine running: dynamic balls bounce off static pads; the selected Paddle is kinematic, so the mouse route moves it and it shoves the balls.</em></p>
+<p><strong>Body settings.</strong> <em>Mass</em> (dynamic only; heavier bodies push lighter ones). <em>Friction</em> and <em>Bounce</em> (restitution) — the effective value for a contact is the product of both bodies&#39; values, so two 0.8 surfaces bounce at 0.64. <em>Lin. / Ang. damping</em> (0–1) bleed off speed and spin like air drag. <em>Velocity</em> and <em>Spin °/s</em> give a dynamic body a starting push. <em>Fixed rotation</em> stops it tumbling.</p>
+<p><strong>Colliders.</strong> <em>Auto</em> picks the natural shape: box → box, sphere and geodesic → sphere, cylinder and cone → cylinder, polygon → prism (flat polygons get a thin slab), torus → a disc, plane → a thin box, everything else → a box around its outline. Override with <em>Box (bounds)</em>, <em>Sphere (bounds)</em>, <em>Cylinder</em>, <em>Prism</em> or <em>Disc</em>. Scale is baked into the collider when the body is built.</p>
+<p><strong>World (World tab → Physics).</strong> Gravity as an X/Y/Z vector (default 0, −9.82, 0 — try 0, 0, 0 for space or a sideways vector for wind). <em>Floor</em> adds an infinite ground at <em>Floor Y</em> with its own bounce and friction. <em>Iterations</em> trades accuracy for speed in stacks and joints (10 is good). <em>Max substeps</em> limits catch-up after a slow frame. <em>Time scale</em> slows or speeds everything (0.25 = slow motion). <em>Max spawned objects</em> caps how many Spawn copies can exist; the oldest is removed first. Floor and solver changes apply on the next Play.</p>
+<figure class="shot"><img src="media/09.png" alt="The World tab with the Physics, Tube, Clock and Camera cards" loading="lazy"></figure>
+
+
+<p><em>World tab: physics on the left, then tube, clock and camera.</em></p>
+<p><strong>Interacting.</strong> With the Hand tool, drag a dynamic body to hold it on a spring towards the cursor; let go mid-drag to throw it. Editing a body&#39;s transform, scale, shape or physics while running rebuilds that body in place.</p>
+<p><strong>Collisions as events.</strong> Every contact reports an impact speed (<code>imp</code>, in units per second). A Collision trigger fires when <code>imp</code> is at least its <em>Min impulse</em> — resting contact sits near 0, a firm drop from 2 units is around 6. The other object&#39;s name can filter the trigger; the ground is called <code>floor</code>.</p>
+<h2 id="signals">Signals</h2>
+<p>A signal is a named number that changes over time; anything in the studio can read it by name — the mod matrix, triggers, text, curves, expressions and scripts. Create them in the <strong>Signals</strong> tab; each card has a live meter (centre = 0, right = positive, left = negative) that moves while running.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Output</th>
+<th>Settings</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LFO</td>
+<td>A repeating wave, −1…+1 (or 0…1 with Unipolar)</td>
+<td>Wave (sine, triangle, saw, ramp, square, sample &amp; hold), Rate Hz, or Tempo sync + Beats per cycle, Phase, Amount, Offset, pulse Width (square)</td>
+</tr>
+<tr>
+<td>Envelope</td>
+<td>0…1 rise-and-fall when an event arrives</td>
+<td>Triggered by event (pattern below), Attack s, Decay s, Curve exponential / linear, Amount; peak scales with the event&#39;s velocity</td>
+</tr>
+<tr>
+<td>Noise</td>
+<td>Smooth wandering value, −1…+1</td>
+<td>Rate, Seed, Amount, Offset, Unipolar</td>
+</tr>
+<tr>
+<td>Random</td>
+<td>A new random target every 1/Rate seconds, glided</td>
+<td>Rate, Glide s, Amount, Offset, Unipolar</td>
+</tr>
+<tr>
+<td>Follow</td>
+<td>An envelope follower of another signal</td>
+<td>Source, Gain, Rise s, Fall s — turns a spiky <code>audio.level</code> into a smooth swell</td>
+</tr>
+<tr>
+<td>Expr</td>
+<td>Any formula, evaluated every frame</td>
+<td>Expression, e.g. <code>S(&quot;mouse.down&quot;) ? -140 : 60</code></td>
+</tr>
+<tr>
+<td>Var</td>
+<td>A value that actions and scripts set</td>
+<td>Initial value; changed by the <em>Set variable</em> action or <code>api.vars.name = …</code></td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/10.png" alt="The Signals tab with an LFO, two envelopes and a noise signal, meters moving" loading="lazy"></figure>
+
+
+<p><em>Signals tab of the Lissajous Synth while it plays: a tempo-synced LFO, envelopes on <code>seq:0</code> (kick) and <code>seq:1</code> (snare), and a noise drift. The bar under each card is its live meter.</em></p>
+<p>Rename a signal on its card; routes that used the old name follow automatically. Signals are evaluated top to bottom each frame, so an Expr can read the ones above it.</p>
+<p><strong>Envelope event patterns.</strong> Comma-separated names; a trailing <code>*</code> matches a prefix. Examples: <code>seq:0</code> (sequencer track 0 hit), <code>beat</code>, <code>collide:Pad*</code> (any object whose name starts with Pad was hit), <code>collide</code> (any collision), <code>note</code>, <code>key:a</code>, <code>click:Button</code>, or any custom event name you send with the <em>Send event</em> action.</p>
+<p><strong>Built-in sources</strong> (open “Built-in sources (live)” at the bottom of the tab to watch them):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>time</code>, <code>beat</code>, <code>bar</code>, <code>step</code>, <code>beats</code>, <code>bpm</code></td>
+<td>Seconds since Play; 0→1 ramp through each beat; 0→1 through each 4-beat bar; sequencer step; beats counted; tempo</td>
+</tr>
+<tr>
+<td><code>mouse.x</code>, <code>mouse.y</code></td>
+<td>Pointer over the viewport, −1…+1 (Y up)</td>
+</tr>
+<tr>
+<td><code>mouse.wx</code>, <code>mouse.wy</code>, <code>mouse.wz</code></td>
+<td>Pointer in world units on the plane through the camera target — use with mode <em>set</em> to make things follow the mouse</td>
+</tr>
+<tr>
+<td><code>mouse.down</code></td>
+<td>1 while a button is held</td>
+</tr>
+<tr>
+<td><code>audio.level</code>, <code>audio.low</code>, <code>audio.mid</code>, <code>audio.high</code>, <code>audio.note</code>, <code>audio.voices</code></td>
+<td>The studio&#39;s own output: loudness, three bands, last note played, voices sounding</td>
+</tr>
+<tr>
+<td><code>in.level</code>, <code>in.low</code>, <code>in.mid</code>, <code>in.high</code></td>
+<td>Audio input analysis (Live inputs module)</td>
+</tr>
+<tr>
+<td><code>midi.note</code>, <code>midi.vel</code>, <code>midi.gate</code>, <code>midi.bend</code>, <code>midi.cc.N</code></td>
+<td>Last MIDI note, its velocity, 1 while held, pitch bend −1…+1, controller N 0…1</td>
+</tr>
+<tr>
+<td><code>key.a</code> …</td>
+<td>1 while that key is held (running only)</td>
+</tr>
+<tr>
+<td><code>data.&lt;column&gt;</code>, <code>data.&lt;column&gt;.raw</code>, <code>data.row</code>, <code>data.phase</code></td>
+<td>Current data row, normalised 0…1 or raw (Data module)</td>
+</tr>
+<tr>
+<td><code>obj.&lt;Name&gt;.x</code> / <code>.y</code> / <code>.z</code> / <code>.speed</code> / <code>.vx</code> / <code>.age</code> / <code>.rx</code> …</td>
+<td>Any object&#39;s live position, speed, velocity, age, rotation</td>
+</tr>
+<tr>
+<td><code>self.x</code> …</td>
+<td>The same for the object that owns the trigger or expression</td>
+</tr>
+<tr>
+<td><code>var.&lt;name&gt;</code>, <code>random</code>, <code>fps</code></td>
+<td>A variable; a fresh random 0…1; frame rate</td>
+</tr>
+</tbody></table></div>
+<h2 id="mod-matrix">Mod matrix</h2>
+<p>The mod matrix is a patchbay: each row (a <em>route</em>) continuously drives one numeric property of one object from one signal, every frame while running. Its value is computed as</p>
+<pre><code class="language-latex">\text{output} = \text{offset} + \text{amount} \times \text{curve}(\text{source})
+</code></pre>
+<p>and then applied to the property in one of three modes:</p>
+<ul>
+<li><strong>+ add</strong> — property = your edited value + output. The natural choice: the object wobbles around where you put it.</li>
+<li><strong>× mul</strong> — property = edited value × output. Good for scaling things up and down proportionally.</li>
+<li><strong>= set</strong> — property = output. Ignores the edited value; use it for mouse-following (<code>mouse.wx</code> → Position X, amount 1) or data-driven placement.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>☑</td>
+<td>Route on/off</td>
+</tr>
+<tr>
+<td>Source</td>
+<td>A signal name (autocompletes) or <code>=</code> followed by an expression, e.g. <code>=sin(t*3)*S(&quot;lfo1&quot;)</code></td>
+</tr>
+<tr>
+<td>L</td>
+<td>MIDI learn: click, then move a knob — the source becomes <code>midi.cc.N</code> (Live inputs)</td>
+</tr>
+<tr>
+<td>In / Out</td>
+<td>Live meters of the source and of the computed output</td>
+</tr>
+<tr>
+<td>Object, Property</td>
+<td>The target. Properties: Position X/Y/Z, Rotation X/Y/Z (degrees), Scale (all) and Scale X/Y/Z, Line width, Glow, Opacity, Hue shift, Fill opacity, plus every numeric Shape parameter of that type (radius, sides, tube r, bins…)</td>
+</tr>
+<tr>
+<td>Amount, Offset</td>
+<td>See the formula; negative amounts invert</td>
+</tr>
+<tr>
+<td>Curve</td>
+<td>linear, abs (folds negatives up), squared (keeps sign, softer near 0), 1 − x (inverts a 0…1 source), stepped (quantises to quarter steps)</td>
+</tr>
+<tr>
+<td>Smooth</td>
+<td>Lag in seconds; 0.05–0.2 removes jitter from mouse and audio sources</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/11.png" alt="The Mod matrix with six routes and live In and Out meters" loading="lazy"></figure>
+
+
+<p><em>The Lissajous Synth&#39;s six routes: the kick envelope scales the Core and thickens the Figure, the snare pulses the Halo, high frequencies tint the ring analyzer, and two slow signals drift rotation and hue.</em></p>
+<p><strong>Fast ways in.</strong> The small <strong>~</strong> at the end of an inspector row creates a route for that property from your first signal (Position, Rotation and Scale offer an axis menu) and opens the tab. The Inspector&#39;s <strong>Modulation</strong> section lists every route aimed at the selected object. <strong>+ Route</strong> in the tab targets the selected object.</p>
+<p><strong>Rules worth knowing.</strong> Several routes can hit the same property; they apply in table order. Routes on Position or Rotation of a <em>dynamic</em> body are ignored because the simulation owns it — make it kinematic, or modulate scale, look and shape instead. Routes on a static or kinematic body move its collider too. Routes aimed at a template also drive every spawned copy. Shape routes rebuild geometry every frame, which is fine for a handful of objects.</p>
+<h2 id="triggers">Triggers</h2>
+<p>A trigger is a rule on one object: <strong>When</strong> something happens, <strong>Then</strong> do something — the way to make scenes respond to events rather than flow continuously. Add them in Inspector → Triggers with <strong>+ Trigger</strong> or a preset (Hit → flash or Hit → note, Click → jump, Key → impulse, Beat → flash). An object can hold any number; each card shows its rule as a title and has a <strong>Fire</strong> button that runs the action once while the scene is running.</p>
+<figure class="shot"><img src="media/12.png" alt="The Triggers section of a pad with a Collision → Play note and a Collision → Flash trigger" loading="lazy"></figure>
+
+
+<p><em>Pad 3 in Bounce Machine carries two triggers on the same event: one plays scale degree 9 at a velocity set by impact speed, the other flashes the pad. The presets sit under the cards.</em></p>
+<p><strong>When</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Arg</th>
+<th>Fires when</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Collision</td>
+<td>other object&#39;s name prefix (empty = anything, <code>floor</code> = ground)</td>
+<td>this body is hit at an impact speed ≥ Min impulse</td>
+</tr>
+<tr>
+<td>Clicked</td>
+<td>—</td>
+<td>clicked with the Hand tool while running</td>
+</tr>
+<tr>
+<td>Key down / Key up</td>
+<td>key name: <code>a</code>, <code>space</code>, <code>arrowup</code>, <code>enter</code>… (empty = any key)</td>
+<td>that key goes down / up while running</td>
+</tr>
+<tr>
+<td>Every N beats</td>
+<td>N (empty = 1)</td>
+<td>the clock&#39;s quarter-note count is a multiple of N</td>
+</tr>
+<tr>
+<td>Every N seconds</td>
+<td>seconds</td>
+<td>a timer per object elapses</td>
+</tr>
+<tr>
+<td>Signal crosses</td>
+<td>a signal name (<code>self.z</code>, <code>lfo1</code>, <code>audio.level</code>…); Threshold + Edge rising / falling / both</td>
+<td>the signal passes the threshold</td>
+</tr>
+<tr>
+<td>Custom event</td>
+<td>event name or pattern (<code>ping</code>, <code>boom*</code>)</td>
+<td>a Send event action anywhere emits that name</td>
+</tr>
+<tr>
+<td>On play</td>
+<td>—</td>
+<td>once when Play starts (and when a copy is spawned)</td>
+</tr>
+<tr>
+<td>Sequencer step</td>
+<td>step numbers <code>0,4,8</code> (empty = every step)</td>
+<td>Sound module: the sequencer reaches those steps</td>
+</tr>
+<tr>
+<td>Sequencer track hit</td>
+<td>track number</td>
+<td>Sound module: that track plays a step</td>
+</tr>
+<tr>
+<td>MIDI/keyboard note</td>
+<td>note number (empty = any)</td>
+<td>Live inputs: a note arrives</td>
+</tr>
+<tr>
+<td>MIDI CC</td>
+<td>controller number</td>
+<td>Live inputs: a knob moves</td>
+</tr>
+</tbody></table></div>
+<p><em>Cooldown</em> (seconds) ignores repeats inside that window — keep 0.05–0.1 on collisions so a rattle is one hit, 0 on beats.</p>
+<p><strong>Then</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Fields</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Flash</td>
+<td>Duration</td>
+<td>brightens and widens the stroke, then fades</td>
+</tr>
+<tr>
+<td>Set colour</td>
+<td>colour, or <code>=expression</code></td>
+<td>replaces the stroke colour</td>
+</tr>
+<tr>
+<td>Apply impulse</td>
+<td>vector <code>x, y, z</code> (expressions)</td>
+<td>kicks a dynamic body; on other objects adds to Drift</td>
+</tr>
+<tr>
+<td>Set velocity</td>
+<td>vector</td>
+<td>replaces the velocity</td>
+</tr>
+<tr>
+<td>Set property / Add to property</td>
+<td>property path (<code>look.hue</code>, <code>pos.1</code>, <code>shape.r</code>, <code>state.count</code>…), value expression</td>
+<td>changes the live object; resets on Stop</td>
+</tr>
+<tr>
+<td>Spawn object</td>
+<td>object (often a Template), offset vector</td>
+<td>creates a copy at this object&#39;s position + offset</td>
+</tr>
+<tr>
+<td>Destroy</td>
+<td>target (empty = this)</td>
+<td>removes the live object</td>
+</tr>
+<tr>
+<td>Send event</td>
+<td>name</td>
+<td>broadcasts an event to every trigger, envelope and script</td>
+</tr>
+<tr>
+<td>Set variable</td>
+<td>variable name, value</td>
+<td>sets a Var signal / <code>var.&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>Log</td>
+<td>message expression</td>
+<td>writes to the Console</td>
+</tr>
+<tr>
+<td>Play note</td>
+<td>instrument, pitch, velocity, length (all expressions)</td>
+<td>Sound module</td>
+</tr>
+<tr>
+<td>Set tempo</td>
+<td>BPM expression</td>
+<td>Sound module</td>
+</tr>
+<tr>
+<td>Emit particles</td>
+<td>count</td>
+<td>Particles module: bursts from this object</td>
+</tr>
+<tr>
+<td>Run code</td>
+<td>JavaScript</td>
+<td>Scripting module</td>
+</tr>
+</tbody></table></div>
+<p>Action fields are expressions, so one trigger can adapt: pitch <code>scale(round(o.pos[0]*2)+7)</code> picks a note from the object&#39;s X position; velocity <code>clamp(imp/8,.2,1)</code> makes harder hits louder; impulse <code>rand(-2,2), 6, 0</code> jumps in a random direction. The variables available are listed in the next section.</p>
+<p><strong>Pattern: chains of events.</strong> One object&#39;s <em>Send event</em> “boom” can make a dozen others flash (<em>Custom event</em> “boom”), start an envelope that pulses a whole layer through the mod matrix, and spawn debris — without any code.</p>
+<h2 id="expressions">Expressions</h2>
+<p>Wherever a field accepts a formula — trigger fields, curve coordinates, text braces, Expr signals, <code>=</code> mod sources — you write one JavaScript expression that returns a number (or a colour string for <em>Set colour</em>). A plain number is just a constant. Mistakes never crash the scene: the field falls back to its default and the Console shows the error once every few seconds.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>t</code>, <code>dt</code></td>
+<td>seconds since Play, seconds since the last frame</td>
+</tr>
+<tr>
+<td><code>S(&quot;name&quot;)</code></td>
+<td>any signal or built-in source</td>
+</tr>
+<tr>
+<td><code>D(&quot;column&quot;)</code></td>
+<td>the current data row&#39;s raw value (text or number)</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>the object that owns the trigger, curve or text: <code>o.pos[0]</code>, <code>o.vel</code>, <code>o.speed</code>, <code>o.age</code>, <code>o.name</code>, <code>o.state</code></td>
+</tr>
+<tr>
+<td><code>imp</code>, <code>other</code></td>
+<td>in collision triggers: impact speed and the other object (<code>other.name</code>)</td>
+</tr>
+<tr>
+<td><code>note</code>, <code>vel</code></td>
+<td>in note triggers: MIDI note number and velocity 0–1</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td>current sequencer step</td>
+</tr>
+<tr>
+<td><code>u</code>, <code>i</code>, <code>n</code></td>
+<td>in curves: position 0→1, sample index, sample count</td>
+</tr>
+<tr>
+<td><code>v</code></td>
+<td>the variables object (<code>v.score</code>)</td>
+</tr>
+<tr>
+<td><code>mouse</code></td>
+<td><code>mouse.x</code>, <code>mouse.wx</code>, <code>mouse.down</code>…</td>
+</tr>
+<tr>
+<td><code>scale(i)</code></td>
+<td>MIDI note of scale degree i in the project key (World/Instruments: Root note + Scale); negative degrees go down</td>
+</tr>
+<tr>
+<td><code>rand(a, b)</code>, <code>noise(x, y)</code></td>
+<td>random number in [a, b); smooth noise about −1…+1</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td>the full scripting API (see Scripting)</td>
+</tr>
+<tr>
+<td>maths</td>
+<td><code>sin cos tan asin acos atan atan2 abs floor ceil round min max pow sqrt exp log hypot sign random PI TAU</code></td>
+</tr>
+<tr>
+<td>helpers</td>
+<td><code>fract(x)</code>, <code>mix(a, b, k)</code>, <code>clamp(x, lo, hi)</code>, <code>smooth(a, b, x)</code> (smoothstep), <code>step01(edge, x)</code></td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/13.png" alt="The Shape section of the Figure curve with its x, y and z formulas" loading="lazy"></figure>
+
+
+<p><em>Expressions in use: the Lissajous Synth&#39;s Figure is one Curve whose x reads the mouse, whose y reads <code>lfo1</code> and whose z breathes with the kick envelope.</em></p>
+<p>Examples:</p>
+<ul>
+<li>Hue that follows height: a route with source <code>obj.Ball.y</code>, property Hue shift, amount 20 (routes have no <code>o</code>, so name the object).</li>
+<li>Louder hits, higher notes: pitch <code>scale(7 + round(imp/2))</code>, velocity <code>clamp(imp/10, .2, 1)</code>.</li>
+<li>Colour that flips every half bar: a beat trigger with Set colour <code>=step &lt; 8 ? &quot;#ff3d2e&quot; : &quot;#3df0b4&quot;</code>.</li>
+<li>A breathing ring on a Curve: <code>x = cos(u*TAU)*(1 + .2*S(&quot;lfo1&quot;))</code>, <code>y = sin(u*TAU)*(1 + .2*S(&quot;lfo1&quot;))</code>.</li>
+</ul>
+<h2 id="running-live-editing-templates-and-spawning">Running, live editing, templates and spawning</h2>
+<p><strong>Transport.</strong> <strong>Play</strong> starts the scene from the edit state: bodies are built, signals start at 0, the clock starts, <em>On play</em> triggers fire. <strong>Pause</strong> freezes time (the picture stays, sound stops scheduling). <strong>Stop</strong> throws the running copy away and shows your edit state again. <strong>Step</strong> advances exactly one frame (1/60 s) — from Stop it starts paused — for inspecting a collision.</p>
+<p><strong>What survives Stop.</strong> Anything you typed into the Inspector, tabs or World settings is part of the project and stays. Anything the scene did to itself — bodies moving, Set property / Set colour actions, spawned copies, destroyed objects, variables, script state — is discarded.</p>
+<p><strong>Live editing.</strong> You can keep editing while it runs: colours, shapes, look and trigger fields apply at once; moving an object teleports it (and its body); changing a body&#39;s physics, scale or shape rebuilds the body. A changed script applies when you press <strong>Apply</strong> in its section (or at the next Play).</p>
+<p><strong>Templates and spawning.</strong> Tick <strong>Template</strong> on an object to keep it out of the running scene. A <em>Spawn object</em> action (or <code>api.spawn(&quot;Name&quot;, [x,y,z])</code>) then creates live copies of it — each copy carries the template&#39;s look, physics, triggers, routes and script, gets a name like <code>Ball#7</code>, and starts with its own age 0. Give copies a lifetime in their script (<code>if (o.age &gt; 10) o.destroy();</code>) or rely on <em>Max spawned objects</em> in World. The Bounce Machine&#39;s spawner is an Empty with an <em>Every 1 beats → Spawn Ball</em> trigger.</p>
+<p><strong>Built-in example projects</strong> (Project button). They are the quickest way to see each system working; open one, press Play, then take it apart in the Inspector.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Shows</th>
+<th>Modules it switches on</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bounce Machine</td>
+<td>beat-driven spawning, collision → note and flash, a kinematic paddle that follows the mouse, an envelope pulsing a spectrum</td>
+<td>Sound, Scripting</td>
+</tr>
+<tr>
+<td>Pendulum Wave</td>
+<td>12 ball-joint pendulums of tuned lengths, threshold triggers ringing bells as each crosses the centre, a scope</td>
+<td>Sound, Joints</td>
+</tr>
+<tr>
+<td>Lissajous Synth</td>
+<td>a drum pattern driving a formula curve, a pulsing geodesic and radial spectrum through envelopes; keys A–K play</td>
+<td>Sound, Live inputs, Particles</td>
+</tr>
+<tr>
+<td>Particle Garden</td>
+<td>two fountains and an attractor that follows the mouse and repels while the button is held (an Expr signal)</td>
+<td>Particles</td>
+</tr>
+<tr>
+<td>Data Skyline</td>
+<td>sample energy data as bars and a line, a cursor walking the rows, the value read out and sonified</td>
+<td>Sound, Data</td>
+</tr>
+<tr>
+<td>Blank</td>
+<td>a floor, one LFO, nothing else</td>
+<td>none</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/14.png" alt="Five templates running: Bounce Machine, Pendulum Wave, Lissajous Synth, Particle Garden, Data Skyline" loading="lazy"></figure>
+
+
+<p><em>The five example projects, each a few seconds after Play.</em></p>
+<p>Loading a template replaces the current scene; save first if you want to keep it.</p>
+<h2 id="module-guides">Module guides</h2>
+<p>Each module below is hidden until you switch it on from <strong>Modules</strong>; every project starts with the same seven instruments and five sequencer tracks, ready for when you do.</p>
+<h3 id="sound">Sound</h3>
+<p><strong>Instruments tab.</strong> Each card is one instrument, numbered 0, 1, 2… — that number (or its name) is what a Play note action and a sequencer track use. <strong>Test</strong> plays scale degree 7 so you hear it alone. <strong>Add instrument</strong> creates one of six engines; <strong>Engine</strong> switches an existing card.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Main controls</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Subtractive</td>
+<td>Wave (saw, square, triangle, sine, noise), Voices 1–6 with Detune in cents, Filter type + Cutoff Hz + Res + Env Hz (how far the filter opens on each note), Attack / Decay / Sustain / Release, Sub oscillator level</td>
+</tr>
+<tr>
+<td>FM</td>
+<td>Ratio (modulator to carrier frequency), Index (brightness, decays during the note), A/D/S/R — bells, electric pianos, metallic hits</td>
+</tr>
+<tr>
+<td>Kick</td>
+<td>Tone Hz (end pitch), Decay; <em>Pitch tracks note</em> makes it tunable</td>
+</tr>
+<tr>
+<td>Snare</td>
+<td>Tone Hz (body), Decay</td>
+</tr>
+<tr>
+<td>Hi-hat</td>
+<td>Tone Hz (high-pass cutoff), Decay</td>
+</tr>
+<tr>
+<td>Tuned noise</td>
+<td>Q (how pitched), Decay — the note sets the filter frequency, for wind, breaths, risers</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/15.png" alt="The Instruments tab with the default kit and the Master &amp; FX card" loading="lazy"></figure>
+
+
+<p><em>Instruments tab: one card per instrument, numbered for triggers and tracks, with Test buttons and the shared Master &amp; FX card.</em></p>
+<p>Every engine also has Gain, Pan (−1…+1) and sends to the shared Delay and Reverb. The <strong>Master &amp; FX</strong> card holds Volume, the project key (Root note as a MIDI number, Scale: major, minor, dorian, phrygian, lydian, mixolydian, pentatonic, minor pentatonic, blues, whole-tone, chromatic), Delay time or tempo-synced beats, Feedback, Delay mix, Reverb size and mix. The default kit is Pluck, Bass, Pad, Bell, Kick, Snare, Hat.</p>
+<p><strong>Sequencer tab.</strong> BPM, Swing (delays every second 16th) and Steps (1–32) sit on top. Each track row has a mute button, a name, an instrument (or <em>events only</em>, which plays nothing but still sends its event), and a MIDI note shown with its name. Click a step to toggle it; <strong>Shift-click</strong> cycles full → half → off for accents. <strong>Randomize</strong> sprinkles a pattern on unmuted tracks; <strong>Clear</strong> empties all. A white outline marks the playing step.</p>
+<figure class="shot"><img src="media/16.png" alt="The Sequencer tab playing a drum and bass pattern" loading="lazy"></figure>
+
+
+<p><em>The Lissajous Synth groove: four-on-the-floor kick, snare on 2 and 4, off-beat hats, a bassline and two pluck notes. The outlined column is the step playing.</em></p>
+<p>Every hit on track N sends the event <code>seq:N</code> (with its velocity) to triggers and envelopes; every step sends <code>step</code>; every quarter sends <code>beat</code>. That is how visuals lock to the groove: an envelope on <code>seq:0</code> turned into a scale route makes an object pump with the kick.</p>
+<p><strong>Spectrum object.</strong> Draws the live frequency content of the studio&#39;s output (<em>out</em>) or the audio input (<em>in</em>) as bars, a line, a radial burst or the raw waveform (<em>wave</em>).</p>
+<h3 id="live-inputs">Live inputs</h3>
+<p>The <strong>I/O</strong> tab has four cards.</p>
+<ul>
+<li><strong>MIDI</strong> — <em>Connect MIDI</em> asks the browser for access. Notes become <code>note</code> events and the <code>midi.note / vel / gate</code> sources; knobs become <code>midi.cc.N</code> and <code>cc</code> events; pitch bend is <code>midi.bend</code>. <em>Play incoming notes on instrument</em> sounds them on the keyboard instrument. In the mod matrix, <strong>L</strong> learns a knob.</li>
+<li><strong>Keyboard notes</strong> — with the box ticked, while running the computer keys A S D F G H J K play white notes and W E T Y U black notes from middle C; Z / X shift the octave. The on-screen keys (C3–C5) play by clicking at any time. Notes reach Note triggers and scripts like MIDI notes.</li>
+<li><strong>Audio input</strong> — <em>Microphone</em> or <em>Audio file…</em> feed the input analyser (<code>in.level</code>, <code>in.low/mid/high</code>, Spectrum set to <em>in</em>). <em>Hear the audio file</em> also plays it through the speakers.</li>
+<li><strong>Export</strong> — the same file exports as the Project window (see Saving).</li>
+</ul>
+<figure class="shot"><img src="media/17.png" alt="The I/O tab with MIDI, Keyboard notes, Audio input and Export cards" loading="lazy"></figure>
+
+
+<p><em>I/O tab. The on-screen keys play the keyboard instrument even when the scene is stopped.</em></p>
+<p>The artifact viewer usually blocks the microphone and often Web MIDI; the exported HTML player opened from your own disk in Chrome or Edge can use both.</p>
+<h3 id="data">Data</h3>
+<p>Paste CSV (first row = column names; comma, semicolon, tab or pipe) or JSON (an array of objects or of arrays) into the <strong>Data</strong> tab, use <strong>Load file…</strong>, or a sample set. The table shows each column and marks text columns. While running a cursor walks the rows at <em>Rows / sec</em> (looping), optionally <em>Interpolating</em> between rows. Read it as <code>data.&lt;column&gt;</code> (0…1 between the column&#39;s min and max), <code>data.&lt;column&gt;.raw</code>, <code>data.row</code>, or as text with <code>D(&quot;column&quot;)</code>.</p>
+<figure class="shot"><img src="media/18.png" alt="The Data tab with sample energy data, its table and the Generate card" loading="lazy"></figure>
+
+
+<p><em>Data tab with the sample energy set: raw text on the left, the parsed table with the current row highlighted, and the generators under it.</em></p>
+<p><strong>Generate from data</strong> builds editable objects from the column you pick (Value), an optional Label column and a Height in units: <strong>Bars</strong> (one box per row, coloured by value, with labels), <strong>Line</strong> (a smoothed path), <strong>Radial</strong> (a closed path around a ring), <strong>Scatter</strong> (spheres placed by the first three numeric columns inside a frame), <strong>Sonify value</strong> (an Empty that plays the current value as a scale note every beat, and sets the cursor to one row per beat), <strong>Cursor + label</strong> (a marker and a live readout that ride along the bars through four routes).</p>
+<h3 id="particles-fields">Particles &amp; fields</h3>
+<p>An <strong>Emitter</strong> sprays particles along its local +Y axis — rotate it to aim. <em>Rate</em> per second (0 = only bursts), <em>Speed</em>, <em>Spread</em> cone in degrees (180 = all directions), <em>Life</em> seconds, <em>Gravity ×</em> (0 floats, negative rises), <em>Drag</em>, <em>Size</em> px, <em>Bounce</em> on the floor, <em>Max</em> alive, <em>Streak</em> (lines instead of dots). Particles take the emitter&#39;s colour and hue. An <strong>Attractor</strong> pulls dynamic bodies and particles within <em>Radius</em>; <em>Strength</em> sets the pull (negative repels) and <em>Softening</em> keeps it finite near the centre. The <strong>Emit particles</strong> action bursts from any object — from an emitter using its own settings, from anything else as a spherical spray in its colour.</p>
+<figure class="shot"><img src="media/19.png" alt="Particle Garden: two fountains spraying into an attractor ring" loading="lazy"></figure>
+
+
+<p><em>Particle Garden: two emitters aimed inward, an attractor (red ring) that follows the mouse, and high persistence painting the streams.</em></p>
+<h3 id="joints">Joints</h3>
+<p>The <strong>Joints</strong> section appears in the inspector of an object with a physics body. <strong>+ Joint</strong>, then choose a type and what it attaches <em>To</em>: another body by name, or <em>(world anchor)</em> — a fixed point you place with <em>Anchor</em>. <strong>Ball / point</strong> lets it swing freely around the pivot (pendulums, chains); <strong>Hinge</strong> swings about an <em>Axis</em> only (doors, flippers, wheels); <strong>Distance</strong> keeps a fixed length (rods); <strong>Spring</strong> pulls toward a <em>Rest</em> length with <em>Stiffness</em> and <em>Damping</em> (bouncy links); <strong>Lock</strong> welds two bodies. Rest or length −1 means “the distance at Play”. Body-to-body joints pivot at the midpoint plus <em>Pivot offs.</em> Joints draw as grey lines (springs dashed amber) while running.</p>
+<figure class="shot"><img src="media/20.png" alt="Pendulum Wave running with Bob 6 selected and its ball joint to a world anchor shown" loading="lazy"></figure>
+
+
+<p><em>Pendulum Wave: each bob hangs from a world anchor on a Ball / point joint (grey lines). The selected bob&#39;s joint card shows the anchor position.</em></p>
+<h3 id="scripting">Scripting</h3>
+<p>Turns on a <strong>Script</strong> section for each object, the <strong>Scene script</strong> tab, the console command line and the <em>Run code</em> action. A script defines any of these functions; the last argument is always <code>api</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Object hook</th>
+<th>Runs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>start(o, api)</code></td>
+<td>once at Play (or spawn)</td>
+</tr>
+<tr>
+<td><code>update(o, dt, api)</code></td>
+<td>every frame</td>
+</tr>
+<tr>
+<td><code>collide(o, other, imp, api)</code></td>
+<td>on every contact (no threshold — filter <code>imp</code> yourself)</td>
+</tr>
+<tr>
+<td><code>click(o, api)</code></td>
+<td>Hand-tool click</td>
+</tr>
+<tr>
+<td><code>beat(o, n, api)</code>, <code>step(o, n, api)</code>, <code>note(o, note, vel, api)</code></td>
+<td>clock and note events</td>
+</tr>
+<tr>
+<td><code>onEvent(o, name, data, api)</code></td>
+<td>every event, custom ones included</td>
+</tr>
+<tr>
+<td><code>release(o, api)</code></td>
+<td>just before the object is destroyed</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/21.png" alt="The Script section of the Ball template with a two-line update function" loading="lazy"></figure>
+
+
+<p><em>The Ball template&#39;s script: three lines that remove each spawned ball once it falls off the screen or gets old.</em></p>
+<p>The scene script uses the same names without the <code>o</code> argument (<code>update(dt, api)</code> …). <strong>Insert template</strong> pastes a commented starter.</p>
+<pre><code class="language-javascript">function start(o, api) { o.state.hits = 0; }
+function collide(o, other, imp, api) {
+  if (imp &lt; 1) return;
+  o.state.hits++;
+  api.note(&#39;Bell&#39;, api.scale(o.state.hits % 8), min(1, imp / 8));
+  if (o.state.hits &gt;= 8) o.destroy();
+}
+</code></pre>
+<p><strong>The object</strong> (<code>o</code>): <code>pos</code>, <code>rot</code> (degrees), <code>scl</code>, <code>look</code>, <code>shape</code> (all writable), <code>state</code> (your own storage), <code>vel</code> (get/set), <code>speed</code>, <code>age</code>, <code>name</code>, <code>def</code> (the edit-time definition), <code>body</code> (the raw cannon.js body), and <code>impulse(x,y,z)</code>, <code>force(x,y,z)</code>, <code>setPos(x,y,z)</code>, <code>setRot(x,y,z)</code>, <code>flashIt(seconds)</code>, <code>emit(n)</code>, <code>get(path)</code>, <code>set(path, v)</code>, <code>destroy()</code>.</p>
+<p><strong>The API</strong>: <code>api.t</code>, <code>api.dt</code>, <code>api.S(name)</code>, <code>api.D(col)</code>, <code>api.vars</code>, <code>api.note(inst, pitch, vel, dur)</code>, <code>api.scale(i)</code>, <code>api.mtof(m)</code>, <code>api.noteName(m)</code>, <code>api.bpm</code> (settable), <code>api.step</code>, <code>api.beat</code>, <code>api.find(name)</code>, <code>api.all()</code>, <code>api.spawn(name, pos, vel)</code>, <code>api.destroy(o)</code>, <code>api.burst(o, n)</code>, <code>api.emit(name, data)</code>, <code>api.setGravity(x,y,z)</code>, <code>api.camera</code> (yaw, pitch, dist, target, fov — settable), <code>api.mouse</code>, <code>api.keys</code>, <code>api.data.rows / cols / get(col,i) / norm(col,i) / row</code>, <code>api.particles</code>, <code>api.world</code> and <code>api.CANNON</code> for raw physics, <code>api.rand</code>, <code>api.noise</code>, <code>api.clamp</code>, <code>api.lerp</code>, <code>api.log(...)</code>. The maths names (<code>sin</code>, <code>PI</code>, <code>TAU</code>, <code>round</code>…) are in scope without a prefix.</p>
+<p><strong>Console.</strong> Logs, script errors and (with <em>Trace events</em>) every event as it fires. With Scripting on, the input line evaluates an expression or statement against the running scene: <code>api.find(&#39;Ball 2&#39;).vel</code>, <code>S(&#39;lfo1&#39;)</code>, <code>api.spawn(&#39;Ball&#39;,[0,6,0])</code>.</p>
+<p>An object script that throws 40 errors is switched off for that run and says so in the Console.</p>
+<h3 id="assist">Assist</h3>
+<p>Type what to add (“a ring of 8 bells on springs that ring a pentatonic note when hit”), choose <em>Add to the scene</em> or <em>Replace the scene</em>, and press Generate. Claude returns ordinary objects, signals, routes, triggers and sequencer tracks, which land in the scene list and tabs for you to edit like anything else. It needs the artifact viewer&#39;s Claude connection and asks for permission on first use; outside it the tab does not appear.</p>
+<h2 id="saving-and-exporting">Saving and exporting</h2>
+<p>Your work is autosaved in this browser after every change, but only the exported files are safe across devices and browser clean-ups — export a .json for anything you care about.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Way</th>
+<th>Where</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autosave</td>
+<td>automatic</td>
+<td>The last state reopens next time you load the studio in this browser</td>
+</tr>
+<tr>
+<td>Undo / Redo</td>
+<td>header, Ctrl Z / Ctrl Shift Z</td>
+<td>Up to 120 steps; undo also stops a running scene</td>
+</tr>
+<tr>
+<td>Save here</td>
+<td>Project window, Ctrl S</td>
+<td>A named slot in this browser (open or delete it from the Project window)</td>
+</tr>
+<tr>
+<td>Project .json</td>
+<td>Project window or I/O tab</td>
+<td>The whole project as a file; Import .json brings it back</td>
+</tr>
+<tr>
+<td>Copy JSON</td>
+<td>I/O tab</td>
+<td>The project on the clipboard, to paste into a message or a note</td>
+</tr>
+<tr>
+<td>HTML player</td>
+<td>Project window or I/O tab</td>
+<td>A standalone copy of the whole studio with your project inside — opens offline in any browser, where microphone and MIDI usually work</td>
+</tr>
+<tr>
+<td>PNG</td>
+<td>header</td>
+<td>A snapshot of the screen with tube effects, without the selection gizmo</td>
+</tr>
+<tr>
+<td>Rec</td>
+<td>header (press again to stop)</td>
+<td>A WebM video of the screen with the studio&#39;s audio</td>
+</tr>
+</tbody></table></div>
+<figure class="shot"><img src="media/22.png" alt="The Project window with templates, browser saves and export buttons" loading="lazy"></figure>
+
+
+<p><em>Header → Project: templates on top, saves in this browser, then file export and import.</em></p>
+<p>Downloads go through the artifact viewer, which asks you to confirm each file. Where downloads are not available, PNG and video open in a preview to save by right-click, and text exports open in a box to copy.</p>
+<p>The project name in the header becomes the file name. A project file holds objects, signals, routes, instruments, sequencer, data, scripts, camera, world settings and the module switches.</p>
+<h2 id="recipes">Recipes</h2>
+<p>Four builds, each using only the visual controls, that cover the main kinds of project.</p>
+<h3 id="a-playable-instrument-tuned-tiles-you-hit-with-balls-sound">A playable instrument: tuned tiles you hit with balls (Sound)</h3>
+<ol>
+<li>Blank project, Modules → <strong>Sound</strong>. In Instruments set Root note 60 and Scale <em>pentatonic</em>.</li>
+<li>Add a <strong>Box</strong> (width 1, height 0.15, depth 1, Physics Static, Bounce 0.9, Style Solid). Add a trigger: Collision, Min impulse 1, Then <strong>Play note</strong>, instrument 3 (Bell), pitch <code>scale(round(o.pos[0]) + 5)</code>, velocity <code>clamp(imp/9, .2, 1)</code>. Add a second trigger: Collision → Flash.</li>
+<li><strong>Ctrl D</strong> it six times and spread the copies along X from −3 to 3 at different heights — each plays its own note because the pitch reads its X.</li>
+<li>Add a <strong>Sphere</strong>, tick <strong>Template</strong>, Physics Dynamic, Bounce 0.7. Add an <strong>Empty</strong> at Y 7 with a trigger <em>Every 1 beats → Spawn object</em> (the sphere), offset <code>rand(-3,3), 0, 0</code>.</li>
+<li>Play. Balls rain on the tiles in time; grab one with the Hand tool and throw it at a tile to play it yourself. Tempo is in World → Clock.</li>
+</ol>
+<figure class="shot"><img src="media/23.png" alt="The tuned-tiles recipe running: balls raining onto seven coloured tiles" loading="lazy"></figure>
+
+
+<p><em>The tuned-tiles instrument after five seconds: a ball every beat, each tile ringing its own pentatonic note and flashing on impact.</em></p>
+<h3 id="a-data-visualization-that-reads-itself-out-data-sound">A data visualization that reads itself out (Data, Sound)</h3>
+<ol>
+<li>Modules → <strong>Data</strong> and <strong>Sound</strong>. Data tab → paste your CSV or <strong>Sample: energy</strong>.</li>
+<li>Under Generate pick the value column and the label column, then <strong>Bars</strong>, <strong>Cursor + label</strong> and <strong>Sonify value</strong>.</li>
+<li>Set Rows / sec to taste (one row per beat = BPM ÷ 60). Play: the cursor walks the bars, the readout shows the row, each value sounds as a pitch.</li>
+<li>For more emphasis, set World → Persistence to about 0.4 so the cursor leaves a fading trail, and give the Cursor a Beat → Flash trigger so it pulses on every step.</li>
+</ol>
+<h3 id="an-audio-reactive-visual-sound">An audio-reactive visual (Sound)</h3>
+<ol>
+<li>Modules → <strong>Sound</strong>. Sequencer: Kick on steps 0, 4, 8, 12; Hat on the off-beats.</li>
+<li>Signals → <strong>Envelope</strong> <code>kick</code> on <code>seq:0</code>, decay 0.25. Signals → <strong>Follow</strong> on <code>audio.high</code>.</li>
+<li>Add a <strong>Geodesic</strong> with routes <code>kick → Scale (all)</code> amount 0.6 and <code>follow1 → Hue shift</code> amount 180. Give it Spin 0, 40, 0.</li>
+<li>Add a <strong>Curve</strong> with preset <em>rose</em> and a route <code>kick → Line width</code> amount 2. Add a <strong>Spectrum</strong> in <em>radial</em> mode behind it.</li>
+<li>World → Persistence 0.6. Play and record with <strong>Rec</strong>.</li>
+</ol>
+<h3 id="an-interactive-toy-driven-by-the-mouse-core-only">An interactive toy driven by the mouse (core only)</h3>
+<ol>
+<li>Add a <strong>Box</strong> (width 2, height 0.2) and set Physics <strong>Kinematic</strong>. Route <code>mouse.wx → Position X</code> with mode <em>= set</em>, smooth 0.05, and <code>mouse.y → Rotation Z</code> amount −25.</li>
+<li>Add a few <strong>Spheres</strong> above it as Dynamic bodies with Bounce 0.8, each with <em>Collision → Flash</em>.</li>
+<li>Play and juggle them with the paddle. Add a Text object reading <code>T+{t.toFixed(1)}</code> for a timer, and a Key trigger on <code>space</code> with <em>Apply impulse</em> <code>0, 8, 0</code> on one sphere for a jump.</li>
+</ol>
+<h2 id="troubleshooting-and-limits">Troubleshooting and limits</h2>
+<p>Most surprises come from three causes: the scene is not running, a module is off, or physics owns the property you are changing.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause and fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No sound</td>
+<td>Browsers start audio only after a click: press Play (or Test) once. Check the Sound module, instrument mute/gain, Master volume, and that the sequencer track or trigger points at the right instrument number.</td>
+</tr>
+<tr>
+<td>A trigger never fires</td>
+<td>It only runs while playing. Collision: is Min impulse too high, the Arg filter wrong, or the object without a physics body? Key: click the viewport first so the page has keyboard focus. Turn on Console → Trace events to watch what arrives.</td>
+</tr>
+<tr>
+<td>A route does nothing</td>
+<td>Is it ticked, aimed at the right object and property, and is the source moving (watch its In meter)? Position and rotation routes are ignored on dynamic bodies.</td>
+</tr>
+<tr>
+<td>Objects fall through each other</td>
+<td>Very fast or very thin bodies can tunnel: thicken the collider, lower speeds, or raise Iterations and Max substeps.</td>
+</tr>
+<tr>
+<td>A dragged object snaps back after Stop</td>
+<td>Expected — changes made by the running scene are discarded. Edit it while stopped.</td>
+</tr>
+<tr>
+<td>Something is missing from the palette or tabs</td>
+<td>It belongs to a module: open Modules.</td>
+</tr>
+<tr>
+<td>Low frame rate</td>
+<td>Lower Bloom or set Glow quality to Fast halo, reduce sphere/torus segments and curve samples, fewer particles, fewer shape routes. The HUD shows FPS.</td>
+</tr>
+<tr>
+<td>Microphone or MIDI blocked</td>
+<td>The artifact viewer restricts them. Use an audio file, or export the HTML player and open it locally in Chrome or Edge.</td>
+</tr>
+<tr>
+<td>A script or expression error</td>
+<td>The Console names the object and line; the object keeps running without that part.</td>
+</tr>
+<tr>
+<td>The project disappeared</td>
+<td>Autosave lives in one browser profile. Re-import your .json or open a saved slot.</td>
+</tr>
+</tbody></table></div>
+<p><strong>Known limits of v0.</strong> Rotation editing uses Euler angles (gimbal lock is possible near ±90° on Y). There are no object groups or parenting yet. Physics colliders are boxes, spheres and prisms — tori and curves collide as simple shapes. The microphone and MIDI depend on the browser and the viewer. The Assist module needs the Claude connection of the artifact viewer.</p>
+</article></div></section>
+<section class="more"><p class="label">[ More from Phosphor ]</p><div class="more-row"><figure class="shelf-item small"><a class="obj obj-page sm" href="../../a/phosphor-chord/index.html" style="--cover:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxNTEyMjYiLz48Y2lyY2xlIGN4PSI5LjUiIGN5PSI5LjUiIHI9IjQuMzIiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI0Ny41IiBjeT0iOS41IiByPSIyLjY1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjkuNSIgcj0iMi4zNCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEwNC41IiBjeT0iOS41IiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTQyLjUiIGN5PSI5LjUiIHI9IjIuODkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjkuNSIgcj0iMi4wOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE5OS41IiBjeT0iOS41IiByPSI0LjI2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjM3LjUiIGN5PSI5LjUiIHI9IjMuMTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjkuNSIgcj0iMS44MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5NC41IiBjeT0iOS41IiByPSI0LjE5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzMyLjUiIGN5PSI5LjUiIHI9IjMuMzMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjkuNSIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM4OS41IiBjeT0iOS41IiByPSI0LjEwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOS41IiBjeT0iMjguNSIgcj0iMy44MCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSIyOC41IiByPSIzLjkxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIyOC41IiByPSIzLjYzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTQyLjUiIGN5PSIyOC41IiByPSI0LjA0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSIyOC41IiByPSIxLjQyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIyOC41IiByPSIzLjQ0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjM3LjUiIGN5PSIyOC41IiByPSI0LjE0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSIyOC41IiByPSIxLjY4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIyOC41IiByPSIzLjI0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzMyLjUiIGN5PSIyOC41IiByPSI0LjIzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSIyOC41IiByPSIxLjk0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIyOC41IiByPSIzLjAyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOS41IiBjeT0iNDcuNSIgcj0iMi40NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSI0Ny41IiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODUuNSIgY3k9IjQ3LjUiIHI9IjIuNzciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMDQuNSIgY3k9IjQ3LjUiIHI9IjIuMjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNDIuNSIgY3k9IjQ3LjUiIHI9IjQuMjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxODAuNSIgY3k9IjQ3LjUiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxOTkuNSIgY3k9IjQ3LjUiIHI9IjEuOTYiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMzcuNSIgY3k9IjQ3LjUiIHI9IjQuMjMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzUuNSIgY3k9IjQ3LjUiIHI9IjMuMjMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyOTQuNSIgY3k9IjQ3LjUiIHI9IjEuNzAiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMzIuNSIgY3k9IjQ3LjUiIHI9IjQuMTUiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNzAuNSIgY3k9IjQ3LjUiIHI9IjMuNDMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzODkuNSIgY3k9IjQ3LjUiIHI9IjEuNDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI0Ny41IiBjeT0iNjYuNSIgcj0iMy43MiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSI2Ni41IiByPSIzLjk4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTIzLjUiIGN5PSI2Ni41IiByPSIxLjI5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTQyLjUiIGN5PSI2Ni41IiByPSIzLjU0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSI2Ni41IiByPSI0LjA5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSI2Ni41IiByPSIxLjU1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjM3LjUiIGN5PSI2Ni41IiByPSIzLjM0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSI2Ni41IiByPSI0LjE5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzEzLjUiIGN5PSI2Ni41IiByPSIxLjgxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzMyLjUiIGN5PSI2Ni41IiByPSIzLjEzIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSI2Ni41IiByPSI0LjI2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjguNSIgY3k9Ijg1LjUiIHI9IjIuNjUiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI0Ny41IiBjeT0iODUuNSIgcj0iMi4zNCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSI4NS41IiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTIzLjUiIGN5PSI4NS41IiByPSIyLjg5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTQyLjUiIGN5PSI4NS41IiByPSIyLjA5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSI4NS41IiByPSI0LjI2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSI4NS41IiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjM3LjUiIGN5PSI4NS41IiByPSIxLjgzIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSI4NS41IiByPSI0LjE5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzEzLjUiIGN5PSI4NS41IiByPSIzLjMzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzMyLjUiIGN5PSI4NS41IiByPSIxLjU3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSI4NS41IiByPSI0LjEwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjguNSIgY3k9IjEwNC41IiByPSIzLjkxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODUuNSIgY3k9IjEwNC41IiByPSIzLjYzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTIzLjUiIGN5PSIxMDQuNSIgcj0iNC4wNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE2MS41IiBjeT0iMTA0LjUiIHI9IjEuNDIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxODAuNSIgY3k9IjEwNC41IiByPSIzLjQ0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSIxMDQuNSIgcj0iNC4xNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI1Ni41IiBjeT0iMTA0LjUiIHI9IjEuNjgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzUuNSIgY3k9IjEwNC41IiByPSIzLjI0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzEzLjUiIGN5PSIxMDQuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS41IiBjeT0iMTA0LjUiIHI9IjEuOTQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNzAuNSIgY3k9IjEwNC41IiByPSIzLjAyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjguNSIgY3k9IjEyMy41IiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjEyMy41IiByPSIyLjc3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iODUuNSIgY3k9IjEyMy41IiByPSIyLjIxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTIzLjUiIGN5PSIxMjMuNSIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE2MS41IiBjeT0iMTIzLjUiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxODAuNSIgY3k9IjEyMy41IiByPSIxLjk2IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjE4LjUiIGN5PSIxMjMuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI1Ni41IiBjeT0iMTIzLjUiIHI9IjMuMjMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzUuNSIgY3k9IjEyMy41IiByPSIxLjcwIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzEzLjUiIGN5PSIxMjMuNSIgcj0iNC4xNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS41IiBjeT0iMTIzLjUiIHI9IjMuNDMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNzAuNSIgY3k9IjEyMy41IiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjguNSIgY3k9IjE0Mi41IiByPSIzLjcyIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjE0Mi41IiByPSIzLjk4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIxNDIuNSIgcj0iMS4yOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMTQyLjUiIHI9IjMuNTQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjE0Mi41IiByPSI0LjA5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIxNDIuNSIgcj0iMS41NSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMTQyLjUiIHI9IjMuMzQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjE0Mi41IiByPSI0LjE5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIxNDIuNSIgcj0iMS44MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMTQyLjUiIHI9IjMuMTMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjE0Mi41IiByPSI0LjI2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIxNDIuNSIgcj0iMi4wNyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjE2MS41IiByPSIyLjY1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjguNSIgY3k9IjE2MS41IiByPSIyLjM0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjE2MS41IiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIxNjEuNSIgcj0iMi44OSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMTYxLjUiIHI9IjIuMDkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjE2MS41IiByPSI0LjI2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIxNjEuNSIgcj0iMy4xMiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMTYxLjUiIHI9IjEuODMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjE2MS41IiByPSI0LjE5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIxNjEuNSIgcj0iMy4zMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMTYxLjUiIHI9IjEuNTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjE2MS41IiByPSI0LjEwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIxNjEuNSIgcj0iMy41MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjE4MC41IiByPSIzLjkxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjE4MC41IiByPSIzLjYzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIxODAuNSIgcj0iNC4wNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE0Mi41IiBjeT0iMTgwLjUiIHI9IjEuNDIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjE4MC41IiByPSIzLjQ0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIxODAuNSIgcj0iNC4xNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIzNy41IiBjeT0iMTgwLjUiIHI9IjEuNjgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjE4MC41IiByPSIzLjI0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIxODAuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMzMi41IiBjeT0iMTgwLjUiIHI9IjEuOTQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjE4MC41IiByPSIzLjAyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIxODAuNSIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjE5OS41IiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNDcuNSIgY3k9IjE5OS41IiByPSIyLjc3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNjYuNSIgY3k9IjE5OS41IiByPSIyLjIxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIxOTkuNSIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE0Mi41IiBjeT0iMTk5LjUiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjE5OS41IiByPSIxLjk2IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIxOTkuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIzNy41IiBjeT0iMTk5LjUiIHI9IjMuMjMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjE5OS41IiByPSIxLjcwIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIxOTkuNSIgcj0iNC4xNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMzMi41IiBjeT0iMTk5LjUiIHI9IjMuNDMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjE5OS41IiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIxOTkuNSIgcj0iNC4wNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIxOC41IiByPSIzLjcyIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNDcuNSIgY3k9IjIxOC41IiByPSIzLjk4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODUuNSIgY3k9IjIxOC41IiByPSIxLjI5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIyMTguNSIgcj0iMy41NCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE0Mi41IiBjeT0iMjE4LjUiIHI9IjQuMDkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxODAuNSIgY3k9IjIxOC41IiByPSIxLjU1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIyMTguNSIgcj0iMy4zNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIzNy41IiBjeT0iMjE4LjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzUuNSIgY3k9IjIxOC41IiByPSIxLjgxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIyMTguNSIgcj0iMy4xMyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMzMi41IiBjeT0iMjE4LjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNzAuNSIgY3k9IjIxOC41IiByPSIyLjA3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIyMTguNSIgcj0iMi45MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjkuNSIgY3k9IjIzNy41IiByPSIyLjM0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNDcuNSIgY3k9IjIzNy41IiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODUuNSIgY3k9IjIzNy41IiByPSIyLjg5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTA0LjUiIGN5PSIyMzcuNSIgcj0iMi4wOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE0Mi41IiBjeT0iMjM3LjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxODAuNSIgY3k9IjIzNy41IiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTk5LjUiIGN5PSIyMzcuNSIgcj0iMS44MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIzNy41IiBjeT0iMjM3LjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzUuNSIgY3k9IjIzNy41IiByPSIzLjMzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk0LjUiIGN5PSIyMzcuNSIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMzMi41IiBjeT0iMjM3LjUiIHI9IjQuMTAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNzAuNSIgY3k9IjIzNy41IiByPSIzLjUzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzg5LjUiIGN5PSIyMzcuNSIgcj0iMS4zMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSIyNTYuNSIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSIyNTYuNSIgcj0iNC4wNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMjU2LjUiIHI9IjEuNDIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNDIuNSIgY3k9IjI1Ni41IiByPSIzLjQ0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSIyNTYuNSIgcj0iNC4xNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMjU2LjUiIHI9IjEuNjgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMzcuNSIgY3k9IjI1Ni41IiByPSIzLjI0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSIyNTYuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMjU2LjUiIHI9IjEuOTQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMzIuNSIgY3k9IjI1Ni41IiByPSIzLjAyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSIyNTYuNSIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI4LjUiIGN5PSIyNzUuNSIgcj0iMi43NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSIyNzUuNSIgcj0iMi4yMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSIyNzUuNSIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMjc1LjUiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNDIuNSIgY3k9IjI3NS41IiByPSIxLjk2IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSIyNzUuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMjc1LjUiIHI9IjMuMjMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMzcuNSIgY3k9IjI3NS41IiByPSIxLjcwIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSIyNzUuNSIgcj0iNC4xNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMjc1LjUiIHI9IjMuNDMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzIuNSIgY3k9IjI3NS41IiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSIyNzUuNSIgcj0iNC4wNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI4LjUiIGN5PSIyOTQuNSIgcj0iMy45OCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIyOTQuNSIgcj0iMS4yOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSIyOTQuNSIgcj0iMy41NCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMjk0LjUiIHI9IjQuMDkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjI5NC41IiByPSIxLjU1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSIyOTQuNSIgcj0iMy4zNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMjk0LjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjI5NC41IiByPSIxLjgxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSIyOTQuNSIgcj0iMy4xMyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMjk0LjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjI5NC41IiByPSIyLjA3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSIyOTQuNSIgcj0iMi45MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI4LjUiIGN5PSIzMTMuNSIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIzMTMuNSIgcj0iMi44OSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9Ijg1LjUiIGN5PSIzMTMuNSIgcj0iMi4wOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEyMy41IiBjeT0iMzEzLjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNjEuNSIgY3k9IjMxMy41IiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTgwLjUiIGN5PSIzMTMuNSIgcj0iMS44MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIxOC41IiBjeT0iMzEzLjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNTYuNSIgY3k9IjMxMy41IiByPSIzLjMzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjc1LjUiIGN5PSIzMTMuNSIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMxMy41IiBjeT0iMzEzLjUiIHI9IjQuMTAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuNSIgY3k9IjMxMy41IiByPSIzLjUzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzcwLjUiIGN5PSIzMTMuNSIgcj0iMS4zMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI4LjUiIGN5PSIzMzIuNSIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIzMzIuNSIgcj0iNC4wNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEwNC41IiBjeT0iMzMyLjUiIHI9IjEuNDIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMjMuNSIgY3k9IjMzMi41IiByPSIzLjQ0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTYxLjUiIGN5PSIzMzIuNSIgcj0iNC4xNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE5OS41IiBjeT0iMzMyLjUiIHI9IjEuNjgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjMzMi41IiByPSIzLjI0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjU2LjUiIGN5PSIzMzIuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI5NC41IiBjeT0iMzMyLjUiIHI9IjEuOTQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMTMuNSIgY3k9IjMzMi41IiByPSIzLjAyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzUxLjUiIGN5PSIzMzIuNSIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM4OS41IiBjeT0iMzMyLjUiIHI9IjIuMjAiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5LjUiIGN5PSIzNTEuNSIgcj0iMi43NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI4LjUiIGN5PSIzNTEuNSIgcj0iMi4yMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIzNTEuNSIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEwNC41IiBjeT0iMzUxLjUiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMjMuNSIgY3k9IjM1MS41IiByPSIxLjk2IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTYxLjUiIGN5PSIzNTEuNSIgcj0iNC4yMyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE5OS41IiBjeT0iMzUxLjUiIHI9IjMuMjMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMTguNSIgY3k9IjM1MS41IiByPSIxLjcwIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjU2LjUiIGN5PSIzNTEuNSIgcj0iNC4xNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI5NC41IiBjeT0iMzUxLjUiIHI9IjMuNDMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMTMuNSIgY3k9IjM1MS41IiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzUxLjUiIGN5PSIzNTEuNSIgcj0iNC4wNSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM4OS41IiBjeT0iMzUxLjUiIHI9IjMuNjIiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI5LjUiIGN5PSIzNzAuNSIgcj0iMy45OCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSIzNzAuNSIgcj0iMS4yOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIzNzAuNSIgcj0iMy41NCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEwNC41IiBjeT0iMzcwLjUiIHI9IjQuMDkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNDIuNSIgY3k9IjM3MC41IiByPSIxLjU1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTYxLjUiIGN5PSIzNzAuNSIgcj0iMy4zNCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE5OS41IiBjeT0iMzcwLjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyMzcuNSIgY3k9IjM3MC41IiByPSIxLjgxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjU2LjUiIGN5PSIzNzAuNSIgcj0iMy4xMyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5NC41IiBjeT0iMzcwLjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzIuNSIgY3k9IjM3MC41IiByPSIyLjA3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzUxLjUiIGN5PSIzNzAuNSIgcj0iMi45MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM4OS41IiBjeT0iMzcwLjUiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI5LjUiIGN5PSIzODkuNSIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ3LjUiIGN5PSIzODkuNSIgcj0iMi44OSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjY2LjUiIGN5PSIzODkuNSIgcj0iMi4wOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEwNC41IiBjeT0iMzg5LjUiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNDIuNSIgY3k9IjM4OS41IiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTYxLjUiIGN5PSIzODkuNSIgcj0iMS44MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE5OS41IiBjeT0iMzg5LjUiIHI9IjQuMTkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyMzcuNSIgY3k9IjM4OS41IiByPSIzLjMzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjU2LjUiIGN5PSIzODkuNSIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5NC41IiBjeT0iMzg5LjUiIHI9IjQuMTAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzIuNSIgY3k9IjM4OS41IiByPSIzLjUzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzUxLjUiIGN5PSIzODkuNSIgcj0iMS4zMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM4OS41IiBjeT0iMzg5LjUiIHI9IjMuOTgiIGZpbGw9IiNGMUVERTQiLz48L3N2Zz4=');--ink:#151226;--accent:#5B4BD6;--paper:#F1EDE4" aria-label="Phosphor Chord">
+  <span class="obj-body"><span class="obj-front"><span class="obj-label"><span class="obj-kind">Instrument</span><span class="obj-title">Phosphor Chord</span></span></span><span class="obj-spine"><span>Phosphor Chord</span></span><span class="obj-edge"></span><span class="obj-top"></span></span></a><figcaption><a href="../../a/phosphor-chord/index.html">[+] Phosphor Chord</a></figcaption></figure><figure class="shelf-item small"><a class="obj obj-page sm" href="../../a/phosphor-console/index.html" style="--cover:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCBzbGljZSI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxNTEyMjYiLz48Y2lyY2xlIGN4PSI5LjAiIGN5PSI5LjAiIHI9IjQuMjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNy4wIiBjeT0iOS4wIiByPSIzLjc0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNDUuMCIgY3k9IjkuMCIgcj0iMS43MCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjExNy4wIiBjeT0iOS4wIiByPSIyLjg5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSI5LjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjkuMCIgcj0iMy43MiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE3MS4wIiBjeT0iOS4wIiByPSIxLjY1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSI5LjAiIHI9IjIuOTMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjkuMCIgcj0iNC4yNyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI3OS4wIiBjeT0iOS4wIiByPSIzLjY5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSI5LjAiIHI9IjEuNjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNjkuMCIgY3k9IjkuMCIgcj0iMi45NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM4Ny4wIiBjeT0iOS4wIiByPSI0LjI4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMjcuMCIgcj0iMS43MCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIyNy4wIiByPSIyLjg5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOTkuMCIgY3k9IjI3LjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjI3LjAiIHI9IjMuNzIiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxMzUuMCIgY3k9IjI3LjAiIHI9IjEuNjUiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMDcuMCIgY3k9IjI3LjAiIHI9IjIuOTMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMjUuMCIgY3k9IjI3LjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNDMuMCIgY3k9IjI3LjAiIHI9IjMuNjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjI3LjAiIHI9IjEuNjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjI3LjAiIHI9IjIuOTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNTEuMCIgY3k9IjI3LjAiIHI9IjQuMjgiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNjkuMCIgY3k9IjI3LjAiIHI9IjMuNjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjI3LjAiIHI9IjEuNTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI0NS4wIiBjeT0iNDUuMCIgcj0iMi44OSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSI0NS4wIiByPSI0LjI3IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODEuMCIgY3k9IjQ1LjAiIHI9IjMuNzIiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI5OS4wIiBjeT0iNDUuMCIgcj0iMS42NSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE3MS4wIiBjeT0iNDUuMCIgcj0iMi45MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iNDUuMCIgcj0iNC4yNyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iNDUuMCIgcj0iMy42OSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIyNS4wIiBjeT0iNDUuMCIgcj0iMS42MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5Ny4wIiBjeT0iNDUuMCIgcj0iMi45NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMxNS4wIiBjeT0iNDUuMCIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMzMy4wIiBjeT0iNDUuMCIgcj0iMy42NiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iNDUuMCIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjkuMCIgY3k9IjYzLjAiIHI9IjIuODkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNy4wIiBjeT0iNjMuMCIgcj0iNC4yNyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSI2My4wIiByPSIzLjcyIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iNjMuMCIgY3k9IjYzLjAiIHI9IjEuNjUiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMzUuMCIgY3k9IjYzLjAiIHI9IjIuOTMiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjYzLjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjYzLjAiIHI9IjMuNjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxODkuMCIgY3k9IjYzLjAiIHI9IjEuNjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjYzLjAiIHI9IjIuOTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjYzLjAiIHI9IjQuMjgiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyOTcuMCIgY3k9IjYzLjAiIHI9IjMuNjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMTUuMCIgY3k9IjYzLjAiIHI9IjEuNTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjYzLjAiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5LjAiIGN5PSI4MS4wIiByPSIzLjcyIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjcuMCIgY3k9IjgxLjAiIHI9IjEuNjUiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5OS4wIiBjeT0iODEuMCIgcj0iMi45MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjExNy4wIiBjeT0iODEuMCIgcj0iNC4yNyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEzNS4wIiBjeT0iODEuMCIgcj0iMy42OSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iODEuMCIgcj0iMS42MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIyNS4wIiBjeT0iODEuMCIgcj0iMi45NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI0My4wIiBjeT0iODEuMCIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iODEuMCIgcj0iMy42NiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI3OS4wIiBjeT0iODEuMCIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iODEuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iODEuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM4Ny4wIiBjeT0iODEuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSI5OS4wIiByPSIyLjkzIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iODEuMCIgY3k9Ijk5LjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI5OS4wIiBjeT0iOTkuMCIgcj0iMy42OSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjExNy4wIiBjeT0iOTkuMCIgcj0iMS42MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iOTkuMCIgcj0iMi45NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iOTkuMCIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIyNS4wIiBjeT0iOTkuMCIgcj0iMy42NiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI0My4wIiBjeT0iOTkuMCIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMxNS4wIiBjeT0iOTkuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMzMy4wIiBjeT0iOTkuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iOTkuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iOTkuMCIgcj0iMS41MiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI3LjAiIGN5PSIxMTcuMCIgcj0iMi45MyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSIxMTcuMCIgcj0iNC4yNyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIxMTcuMCIgcj0iMy42OSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIxMTcuMCIgcj0iMS42MSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMTE3LjAiIHI9IjIuOTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjExNy4wIiByPSI0LjI4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTg5LjAiIGN5PSIxMTcuMCIgcj0iMy42NiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iMTE3LjAiIHI9IjEuNTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjExNy4wIiByPSIzLjAxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIxMTcuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxNS4wIiBjeT0iMTE3LjAiIHI9IjMuNjMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjExNy4wIiByPSIxLjUyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMTM1LjAiIHI9IjQuMjciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNy4wIiBjeT0iMTM1LjAiIHI9IjMuNjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI0NS4wIiBjeT0iMTM1LjAiIHI9IjEuNjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjEzNS4wIiByPSIyLjk3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSIxMzUuMCIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMTM1LjAiIHI9IjMuNjYiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjEzNS4wIiByPSIxLjU3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSIxMzUuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iMTM1LjAiIHI9IjQuMjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjEzNS4wIiByPSIzLjYzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIxMzUuMCIgcj0iMS41MiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iMTM1LjAiIHI9IjMuMDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjEzNS4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMTUzLjAiIHI9IjEuNjEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI4MS4wIiBjeT0iMTUzLjAiIHI9IjIuOTciIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5OS4wIiBjeT0iMTUzLjAiIHI9IjQuMjgiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjE1My4wIiByPSIzLjY2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSIxNTMuMCIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iMTUzLjAiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMjUuMCIgY3k9IjE1My4wIiByPSI0LjI5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSIxNTMuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iMTUzLjAiIHI9IjEuNTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjE1My4wIiByPSIzLjA0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzUxLjAiIGN5PSIxNTMuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iMTUzLjAiIHI9IjMuNjAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjE1My4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNDUuMCIgY3k9IjE3MS4wIiByPSIyLjk3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNjMuMCIgY3k9IjE3MS4wIiByPSI0LjI4IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODEuMCIgY3k9IjE3MS4wIiByPSIzLjY2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOTkuMCIgY3k9IjE3MS4wIiByPSIxLjU3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTcxLjAiIGN5PSIxNzEuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iMTcxLjAiIHI9IjQuMjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyMDcuMCIgY3k9IjE3MS4wIiByPSIzLjYzIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjI1LjAiIGN5PSIxNzEuMCIgcj0iMS41MiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5Ny4wIiBjeT0iMTcxLjAiIHI9IjMuMDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMTUuMCIgY3k9IjE3MS4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzMzLjAiIGN5PSIxNzEuMCIgcj0iMy42MCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iMTcxLjAiIHI9IjEuNDgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5LjAiIGN5PSIxODkuMCIgcj0iMi45NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI3LjAiIGN5PSIxODkuMCIgcj0iNC4yOCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSIxODkuMCIgcj0iMy42NiIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIxODkuMCIgcj0iMS41NyIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEzNS4wIiBjeT0iMTg5LjAiIHI9IjMuMDEiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjE4OS4wIiByPSI0LjI5IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTcxLjAiIGN5PSIxODkuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iMTg5LjAiIHI9IjEuNTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjE4OS4wIiByPSIzLjA0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc5LjAiIGN5PSIxODkuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI5Ny4wIiBjeT0iMTg5LjAiIHI9IjMuNjAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMTUuMCIgY3k9IjE4OS4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg3LjAiIGN5PSIxODkuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjkuMCIgY3k9IjIwNy4wIiByPSIzLjY2IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjcuMCIgY3k9IjIwNy4wIiByPSIxLjU3IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOTkuMCIgY3k9IjIwNy4wIiByPSIzLjAxIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTE3LjAiIGN5PSIyMDcuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEzNS4wIiBjeT0iMjA3LjAiIHI9IjMuNjMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjIwNy4wIiByPSIxLjUyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjI1LjAiIGN5PSIyMDcuMCIgcj0iMy4wNCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI0My4wIiBjeT0iMjA3LjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjIwNy4wIiByPSIzLjYwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjc5LjAiIGN5PSIyMDcuMCIgcj0iMS40OCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iMjA3LjAiIHI9IjMuMDgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNjkuMCIgY3k9IjIwNy4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzg3LjAiIGN5PSIyMDcuMCIgcj0iMy41NyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIyMjUuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIyMjUuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9Ijk5LjAiIGN5PSIyMjUuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjExNy4wIiBjeT0iMjI1LjAiIHI9IjEuNTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxODkuMCIgY3k9IjIyNS4wIiByPSIzLjA0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjA3LjAiIGN5PSIyMjUuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIyNS4wIiBjeT0iMjI1LjAiIHI9IjMuNjAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNDMuMCIgY3k9IjIyNS4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzE1LjAiIGN5PSIyMjUuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMzMy4wIiBjeT0iMjI1LjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuMCIgY3k9IjIyNS4wIiByPSIzLjU3IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzY5LjAiIGN5PSIyMjUuMCIgcj0iMS40NCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI3LjAiIGN5PSIyNDMuMCIgcj0iMy4wMSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSIyNDMuMCIgcj0iNC4yOSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIyNDMuMCIgcj0iMy42MyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIyNDMuMCIgcj0iMS41MiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMjQzLjAiIHI9IjMuMDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjI0My4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTg5LjAiIGN5PSIyNDMuMCIgcj0iMy42MCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iMjQzLjAiIHI9IjEuNDgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjI0My4wIiByPSIzLjA4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIyNDMuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxNS4wIiBjeT0iMjQzLjAiIHI9IjMuNTciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjI0My4wIiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMjYxLjAiIHI9IjQuMjkiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNy4wIiBjeT0iMjYxLjAiIHI9IjMuNjMiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI0NS4wIiBjeT0iMjYxLjAiIHI9IjEuNTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjI2MS4wIiByPSIzLjA0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSIyNjEuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMjYxLjAiIHI9IjMuNjAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjI2MS4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSIyNjEuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iMjYxLjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjI2MS4wIiByPSIzLjU3IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIyNjEuMCIgcj0iMS40NCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iMjYxLjAiIHI9IjMuMTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjI2MS4wIiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMjc5LjAiIHI9IjEuNTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI4MS4wIiBjeT0iMjc5LjAiIHI9IjMuMDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5OS4wIiBjeT0iMjc5LjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjI3OS4wIiByPSIzLjYwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSIyNzkuMCIgcj0iMS40OCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iMjc5LjAiIHI9IjMuMDgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyMjUuMCIgY3k9IjI3OS4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSIyNzkuMCIgcj0iMy41NyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iMjc5LjAiIHI9IjEuNDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjI3OS4wIiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzUxLjAiIGN5PSIyNzkuMCIgcj0iNC4zMSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iMjc5LjAiIHI9IjMuNTQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjI3OS4wIiByPSIxLjM5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNDUuMCIgY3k9IjI5Ny4wIiByPSIzLjA0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iNjMuMCIgY3k9IjI5Ny4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iODEuMCIgY3k9IjI5Ny4wIiByPSIzLjYwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iOTkuMCIgY3k9IjI5Ny4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTcxLjAiIGN5PSIyOTcuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iMjk3LjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyMDcuMCIgY3k9IjI5Ny4wIiByPSIzLjU3IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjI1LjAiIGN5PSIyOTcuMCIgcj0iMS40NCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI5Ny4wIiBjeT0iMjk3LjAiIHI9IjMuMTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzMTUuMCIgY3k9IjI5Ny4wIiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzMzLjAiIGN5PSIyOTcuMCIgcj0iMy41NCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iMjk3LjAiIHI9IjEuMzkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSI5LjAiIGN5PSIzMTUuMCIgcj0iMy4wNCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI3LjAiIGN5PSIzMTUuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSIzMTUuMCIgcj0iMy42MCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIzMTUuMCIgcj0iMS40OCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjEzNS4wIiBjeT0iMzE1LjAiIHI9IjMuMDgiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjMxNS4wIiByPSI0LjMwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTcxLjAiIGN5PSIzMTUuMCIgcj0iMy41NyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE4OS4wIiBjeT0iMzE1LjAiIHI9IjEuNDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjMxNS4wIiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjc5LjAiIGN5PSIzMTUuMCIgcj0iNC4zMSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjI5Ny4wIiBjeT0iMzE1LjAiIHI9IjMuNTQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMTUuMCIgY3k9IjMxNS4wIiByPSIxLjM5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzg3LjAiIGN5PSIzMTUuMCIgcj0iMy4xNSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjkuMCIgY3k9IjMzMy4wIiByPSIzLjYwIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjcuMCIgY3k9IjMzMy4wIiByPSIxLjQ4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOTkuMCIgY3k9IjMzMy4wIiByPSIzLjA4IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTE3LjAiIGN5PSIzMzMuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjEzNS4wIiBjeT0iMzMzLjAiIHI9IjMuNTciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNTMuMCIgY3k9IjMzMy4wIiByPSIxLjQ0IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjI1LjAiIGN5PSIzMzMuMCIgcj0iMy4xMiIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI0My4wIiBjeT0iMzMzLjAiIHI9IjQuMzEiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNjEuMCIgY3k9IjMzMy4wIiByPSIzLjU0IiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjc5LjAiIGN5PSIzMzMuMCIgcj0iMS4zOSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM1MS4wIiBjeT0iMzMzLjAiIHI9IjMuMTUiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzNjkuMCIgY3k9IjMzMy4wIiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzg3LjAiIGN5PSIzMzMuMCIgcj0iMy41MSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIzNTEuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIzNTEuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9Ijk5LjAiIGN5PSIzNTEuMCIgcj0iMy41NyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjExNy4wIiBjeT0iMzUxLjAiIHI9IjEuNDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxODkuMCIgY3k9IjM1MS4wIiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjA3LjAiIGN5PSIzNTEuMCIgcj0iNC4zMSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIyNS4wIiBjeT0iMzUxLjAiIHI9IjMuNTQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNDMuMCIgY3k9IjM1MS4wIiByPSIxLjM5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMzE1LjAiIGN5PSIzNTEuMCIgcj0iMy4xNSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjMzMy4wIiBjeT0iMzUxLjAiIHI9IjQuMzEiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzNTEuMCIgY3k9IjM1MS4wIiByPSIzLjUxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMzY5LjAiIGN5PSIzNTEuMCIgcj0iMS4zNSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI3LjAiIGN5PSIzNjkuMCIgcj0iMy4wOCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjQ1LjAiIGN5PSIzNjkuMCIgcj0iNC4zMCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjYzLjAiIGN5PSIzNjkuMCIgcj0iMy41NyIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjgxLjAiIGN5PSIzNjkuMCIgcj0iMS40NCIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMzY5LjAiIHI9IjMuMTIiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjM2OS4wIiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMTg5LjAiIGN5PSIzNjkuMCIgcj0iMy41NCIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjIwNy4wIiBjeT0iMzY5LjAiIHI9IjEuMzkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjM2OS4wIiByPSIzLjE1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIzNjkuMCIgcj0iNC4zMSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjMxNS4wIiBjeT0iMzY5LjAiIHI9IjMuNTEiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIzMzMuMCIgY3k9IjM2OS4wIiByPSIxLjM1IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iOS4wIiBjeT0iMzg3LjAiIHI9IjQuMzAiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNy4wIiBjeT0iMzg3LjAiIHI9IjMuNTciIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSI0NS4wIiBjeT0iMzg3LjAiIHI9IjEuNDQiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIxMTcuMCIgY3k9IjM4Ny4wIiByPSIzLjEyIiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMTM1LjAiIGN5PSIzODcuMCIgcj0iNC4zMSIgZmlsbD0iI0YxRURFNCIvPjxjaXJjbGUgY3g9IjE1My4wIiBjeT0iMzg3LjAiIHI9IjMuNTQiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIxNzEuMCIgY3k9IjM4Ny4wIiByPSIxLjM5IiBmaWxsPSIjNUI0QkQ2Ii8+PGNpcmNsZSBjeD0iMjQzLjAiIGN5PSIzODcuMCIgcj0iMy4xNSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjI2MS4wIiBjeT0iMzg3LjAiIHI9IjQuMzEiIGZpbGw9IiNGMUVERTQiLz48Y2lyY2xlIGN4PSIyNzkuMCIgY3k9IjM4Ny4wIiByPSIzLjUxIiBmaWxsPSIjRjFFREU0Ii8+PGNpcmNsZSBjeD0iMjk3LjAiIGN5PSIzODcuMCIgcj0iMS4zNSIgZmlsbD0iIzVCNEJENiIvPjxjaXJjbGUgY3g9IjM2OS4wIiBjeT0iMzg3LjAiIHI9IjMuMTkiIGZpbGw9IiM1QjRCRDYiLz48Y2lyY2xlIGN4PSIzODcuMCIgY3k9IjM4Ny4wIiByPSI0LjMxIiBmaWxsPSIjRjFFREU0Ii8+PC9zdmc+');--ink:#151226;--accent:#5B4BD6;--paper:#F1EDE4" aria-label="Phosphor Console">
+  <span class="obj-body"><span class="obj-front"><span class="obj-label"><span class="obj-kind">Instrument</span><span class="obj-title">Phosphor Console</span></span></span><span class="obj-spine"><span>Phosphor Console</span></span><span class="obj-edge"></span><span class="obj-top"></span></span></a><figcaption><a href="../../a/phosphor-console/index.html">[+] Phosphor Console</a></figcaption></figure></div></section>
+<nav class="pager"><a href="../../a/vellum/index.html"><span class="label">[ ← Previous ]</span>SpeedV</a><a href="../../a/micro-gfx/index.html"><span class="label">[ Next → ]</span>MICRO/GFX</a></nav></main><footer class="footer"><div class="footer-row"><span><em>Event Horizon</em> · 12 pieces · updated 26 Nov 2026</span><a href="../../my-work.html">[ Back up my saved work ]</a><span>Made with Claude. Runs without it.</span></div></footer>
+<script src="../../assets/site.js" defer></script>
+</body>
+</html>
